@@ -1,0 +1,53 @@
+/* styles/components/BulkRequestForm.css */
+.bulk-request-form {
+    padding: 2rem 0;
+  }
+  .bulk-request-form h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  .bulk-request-form form {
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .bulk-request-form label {
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+    color: #333;
+  }
+  .bulk-request-form input,
+  .bulk-request-form textarea {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  .bulk-request-form button {
+    align-self: flex-end;
+    padding: 0.75rem 1.5rem;
+    background: #A01d46;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  @media (max-width: 768px) {
+    .bulk-request-form form {
+      max-width: 100%;
+      padding: 0 1rem;
+    }
+    .bulk-request-form button {
+      width: 100%;
+      align-self: center;
+    }
+  }
+  @media (max-width: 480px) {
+    .bulk-request-form form {
+      gap: 0.5rem;
+    }
+  }
+  

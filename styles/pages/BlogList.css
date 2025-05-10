@@ -1,0 +1,44 @@
+/* styles/pages/BlogList.css */
+.blog-list-page {
+    padding: 2rem 4rem;
+  }
+  
+  .blog-list-page h1 {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+  }
+  
+  .blog-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .blog-list li {
+    margin-bottom: 1rem;
+  }
+  
+  .blog-list a {
+    color: #A01d46;
+    text-decoration: none;
+    font-size: 1.1rem;
+  }
+  
+  .blog-list a:hover {
+    text-decoration: underline;
+  }
+  
+  @media (max-width: 768px) {
+    .blog-list-page {
+      padding: 1rem 2rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .blog-list-page {
+      padding: 0.5rem 1rem;
+    }
+    .blog-list li {
+      margin-bottom: 0.75rem;
+    }
+  }
+  

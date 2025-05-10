@@ -1,0 +1,21 @@
+/* styles/pages/Home.css */
+.home-page {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 0rem 4rem;
+  }
+  
+  @media (max-width: 992px) {
+    .home-page {
+      padding: 1rem 2rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .home-page {
+      padding: 0.5rem 1rem;
+      gap: 1.5rem;
+    }
+  }
+  

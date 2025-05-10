@@ -1,0 +1,52 @@
+/* styles/components/CategoriesGrid.css */
+
+.categories-section {
+  padding: 2rem 0;
+  text-align: center;
+}
+
+.categories-title {
+  font-size: 1.75rem;
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 2rem;
+  justify-items: center;
+}
+
+.category-card {
+  text-align: center;
+  cursor: pointer;
+}
+
+.category-image-wrapper {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 0.75rem;
+  border: 10px solid #edb8c9;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.category-name {
+  font-size: 1rem;
+  color: #555;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .categories-grid {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1.5rem;
+  }
+  .category-image-wrapper {
+    width: 100px;
+    height: 100px;
+  }
+}

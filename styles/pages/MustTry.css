@@ -1,0 +1,31 @@
+/* styles/pages/MustTry.css */
+.must-try-page {
+    padding: 2rem 4rem;
+  }
+  
+  .must-try-page h1 {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+  }
+  
+  .must-try-page .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  @media (max-width: 768px) {
+    .must-try-page {
+      padding: 1rem 2rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .must-try-page {
+      padding: 0.5rem 1rem;
+    }
+    .must-try-page .product-grid {
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    }
+  }
+  

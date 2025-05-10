@@ -1,0 +1,34 @@
+/* styles/pages/Checkout.css */
+.checkout-page {
+    display: flex;
+    gap: 2rem;
+    padding: 2rem 4rem;
+  }
+  
+  .checkout-page h1 {
+    width: 100%;
+    margin-bottom: 1rem;
+    font-size: 1.75rem;
+  }
+  
+  .checkout-page > div {
+    flex: 1;
+    background: #fff;
+    padding: 1.5rem;
+    border: 1px solid #eaeaea;
+    border-radius: 4px;
+  }
+  
+  @media (max-width: 992px) {
+    .checkout-page {
+      padding: 1rem 2rem;
+      gap: 1rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .checkout-page {
+      flex-direction: column;
+    }
+  }
+  

@@ -1,0 +1,49 @@
+/* styles/components/TestimonialsSlider.css */
+.testimonials-slider {
+    display: flex;
+    overflow-x: auto;
+    gap: 1rem;
+    padding: 2rem 0;
+  }
+  .ts-card {
+    flex: 0 0 250px;
+    background: #fff;
+    padding: 1rem;
+    border: 1px solid #eaeaea;
+    border-radius: 4px;
+    text-align: center;
+  }
+  .ts-photo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 0.5rem;
+  }
+  .ts-card blockquote {
+    font-style: italic;
+    margin: 0.5rem 0;
+  }
+  .ts-author {
+    font-size: 0.8rem;
+    color: #666;
+  }
+  
+  @media (max-width: 768px) {
+    .testimonials-slider {
+      gap: 0.5rem;
+    }
+    .ts-card {
+      flex: 0 0 200px;
+    }
+  }
+  @media (max-width: 480px) {
+    .testimonials-slider {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .ts-card {
+      flex: 1 1 100%;
+    }
+  }
+  
