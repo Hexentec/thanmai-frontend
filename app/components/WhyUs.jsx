@@ -1,24 +1,50 @@
 'use client';
 
 import React from 'react';
+import {
+  FaHistory,
+  FaBoxOpen,
+  FaLeaf,
+  FaTruck
+} from 'react-icons/fa';
 import '../../styles/components/WhyUs.css';
 
 export default function WhyUs() {
   const items = [
-    { icon: '/assets/icons/traditional.svg', title: 'Traditional Recipe', text: 'Handcrafted using time-tested recipes.' },
-    { icon: '/assets/icons/small-batch.svg',  title: 'Small-Batch Quality', text: 'Freshly made in every order.' },
-    { icon: '/assets/icons/pure.svg',         title: 'Pure Ingredients',    text: 'No preservatives, no compromise.' },
+    {
+      Icon: FaHistory,
+      title: 'Traditional Recipe',
+      text: 'Handcrafted using time-tested family recipes.'
+    },
+    {
+      Icon: FaBoxOpen,
+      title: 'Small-Batch Quality',
+      text: 'Every jar is made fresh in small batches.'
+    },
+    {
+      Icon: FaLeaf,
+      title: 'Pure Ingredients',
+      text: 'Only the finest, preservative-free ingredients.'
+    },
+    {
+      Icon: FaTruck,
+      title: 'Fast Delivery',
+      text: 'Delivered swiftly to your doorstep.'
+    }
   ];
 
   return (
-    <section className="why-us">
-      {items.map((it, i) => (
-        <div key={i} className="wu-item">
-          <img src={it.icon} alt={it.title} className="wu-icon" />
-          <h3>{it.title}</h3>
-          <p>{it.text}</p>
-        </div>
-      ))}
+    <section className="why-us-section">
+      <h2 className="wu-title">Why Thanmai Home Foods</h2>
+      <div className="why-us">
+        {items.map(({ Icon, title, text }, i) => (
+          <div key={i} className="wu-item">
+            <Icon className="wu-icon" />
+            <h3 className="wu-item-title">{title}</h3>
+            <p className="wu-item-text">{text}</p>
+          </div>
+        ))}
+      </div>
     </section>
   );
 }
