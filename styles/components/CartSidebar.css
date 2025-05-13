@@ -1,4 +1,7 @@
-/* Overlay (unchanged) */
+/* ------------------------------ */
+/* Base Styles                    */
+/* ------------------------------ */
+
 .cs-overlay {
   position: fixed;
   top: 0; left: 0;
@@ -14,11 +17,10 @@
   pointer-events: all;
 }
 
-/* Drawer */
 .cs-drawer {
   position: absolute;
   top: 0; right: 0;
-  width: 320px;
+  width: 320px;              /* default desktop width */
   height: 100%;
   background: #fff;
   display: flex;
@@ -31,7 +33,6 @@
   transform: translateX(0);
 }
 
-/* Header */
 .cs-header {
   display: flex;
   justify-content: space-between;
@@ -50,18 +51,25 @@
   cursor: pointer;
 }
 
-/* Items list */
 .cs-items {
   flex: 1;
   overflow-y: auto;
   padding: 1rem;
 }
+.cs-empty {
+  text-align: center;
+  color: #666;
+  font-size: 0.95rem;
+  padding: 2rem 0;
+}
+
 .cs-item {
   display: flex;
   align-items: center;
   margin-bottom: 1rem;
 }
 .cs-item-img {
+  width: 60px; height: 60px;
   border: 1px solid #ddd;
   border-radius: 4px;
   flex-shrink: 0;
@@ -99,6 +107,7 @@
   text-align: center;
   font-size: 0.95rem;
 }
+
 .cs-item-right {
   text-align: right;
 }
@@ -121,7 +130,6 @@
   color: #c62828;
 }
 
-/* Footer */
 .cs-footer {
   padding: 1rem;
   border-top: 1px solid #eee;
@@ -131,9 +139,7 @@
   justify-content: space-between;
   margin-bottom: 1rem;
 }
-.cs-subtotal strong {
-  font-size: 1rem;
-}
+.cs-subtotal strong,
 .cs-subtotal span {
   font-size: 1rem;
 }
@@ -153,32 +159,69 @@
   cursor: not-allowed;
 }
 
-/* Empty state */
-.cs-empty {
-  text-align: center;
-  color: #666;
-  font-size: 0.95rem;
-  padding: 2rem 0;
-}
-
 /* ------------------------------ */
-/* Responsive Overrides           */
+/* Tablet (≤1024px)               */
 /* ------------------------------ */
-
-/* Tablet and below: drawer takes 60% of width */
 @media (max-width: 1024px) {
   .cs-drawer {
-    width: 60%;
+    width: 60%;   /* narrower on tablets */
+  }
+  .cs-header h2 {
+    font-size: 1.2rem;
+  }
+  .cs-close {
+    font-size: 1.4rem;
   }
 }
 
-/* Mobile: drawer takes full width, no shadow on body */
-@media (max-width: 600px) {
+/* ------------------------------ */
+/* Small Tablet (≤768px)          */
+/* ------------------------------ */
+@media (max-width: 768px) {
+  .cs-drawer {
+    width: 75%;
+  }
+  .cs-item {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+  .cs-item-img {
+    width: 50px; height: 50px;
+    margin-bottom: 0.5rem;
+  }
+  .cs-item-info {
+    flex: 1 1 100%;
+    margin: 0 0 0.75rem 0;
+  }
+  .cs-item-right {
+    flex: 1 1 100%;
+    text-align: right;
+    margin-top: 0.5rem;
+  }
+  .cs-qty button {
+    width: 24px; height: 24px;
+  }
+  .cs-footer {
+    padding: 0.75rem;
+  }
+  .cs-checkout {
+    padding: 0.65rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* ------------------------------ */
+/* Mobile (≤480px)                */
+/* ------------------------------ */
+@media (max-width: 480px) {
   .cs-drawer {
     width: 100%;
   }
   .cs-overlay {
     background: rgba(0,0,0,0.6);
+  }
+  .cs-header {
+    padding: 0.75rem;
   }
   .cs-header h2 {
     font-size: 1.1rem;
@@ -190,27 +233,15 @@
     flex-direction: column;
     align-items: flex-start;
   }
-  .cs-item-img {
-    margin-bottom: 0.5rem;
-  }
   .cs-item-info {
     margin: 0 0 0.75rem 0;
   }
   .cs-item-right {
     align-self: stretch;
     text-align: left;
-  }
-  .cs-item-right span {
-    margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
   }
   .cs-qty button {
-    width: 24px; height: 24px;
-  }
-  .cs-footer {
-    padding: 0.75rem;
-  }
-  .cs-checkout {
-    padding: 0.65rem;
-    font-size: 0.95rem;
+    width: 22px; height: 22px;
   }
 }

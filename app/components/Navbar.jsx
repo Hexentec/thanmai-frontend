@@ -106,9 +106,9 @@ export default function Navbar() {
           <Link href="/"><img src="/assets/logo.png" alt="Logo" className="mobile-logo" /></Link>
           <div className="icons">
             {isLoggedIn ? (
-              <button className="nav-logout" onClick={handleLogout}>
+              <Link href="/" className="nav-logout" onClick={handleLogout}>
                 <FiUser size={20} />
-              </button>
+              </Link>
             ) : (
               <Link href={loginHref}><FiUser size={20} /></Link>
             )}
