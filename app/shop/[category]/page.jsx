@@ -7,7 +7,10 @@ import api from '../../lib/api'
 import '../../../styles/pages/Category.css'
 
 // Force SSR (no static export) for this dynamic route
-export const dynamic = 'force-dynamic'
+export async function generateStaticParams() {
+  const cats = await api.get('/categories').then(r => r.data)
+  return cats.map(cat => ({ category: cat.slug }))
+}
 
 export default async function ShopCategoryPage({ params }) {
   const slug = params.category  // “veg-pickles” etc.
