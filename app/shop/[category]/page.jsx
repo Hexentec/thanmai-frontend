@@ -6,6 +6,13 @@ import Image from 'next/image'
 import api from '../../lib/api'
 import '../../../styles/pages/Category.css'
 
+
+
+export const dynamicParams = true    // allow params not returned by generateStaticParams
+export const dynamic       = 'force-dynamic'  // always render on each request
+export const revalidate    = 0       // disable ISR
+
+
 // Force SSR (no static export) for this dynamic route
 export async function generateStaticParams() {
   const cats = await api.get('/categories').then(r => r.data)

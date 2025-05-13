@@ -3,6 +3,10 @@ import React from 'react'
 import ProductPage from './page.client'
 import api         from '../../lib/api'
 
+export const dynamicParams = true    // allow params not returned by generateStaticParams
+export const dynamic       = 'force-dynamic'  // always render on each request
+export const revalidate    = 0       // disable ISR
+
 // 1️⃣ Pre-generate one page per product slug
 export async function generateStaticParams() {
   const prods = await api.get('/products').then(r => r.data)
