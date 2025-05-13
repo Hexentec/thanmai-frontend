@@ -71,6 +71,36 @@
   }
 }
 
+/* components/Navbar.css */
+
+.cart-button {
+  position: relative;
+  background: none;
+  border: none;
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  font: inherit;
+}
+
+.cart-button .cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #ff4d4f;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 0.7rem;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+
 /* === Mobile Middle Nav === */
 .navbar-middle.navbar-mobile {
   display: none;

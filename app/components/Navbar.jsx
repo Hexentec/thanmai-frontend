@@ -1,21 +1,34 @@
+// src/components/Navbar.jsx
 'use client';
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   FiMenu,
   FiSearch,
-  FiHeart,
   FiUser,
   FiShoppingCart
 } from 'react-icons/fi';
+import { useCart } from '../context/CartContext';
 import api from '../lib/api';
 import '../../styles/components/Navbar.css';
 
 export default function Navbar() {
   const [texts, setTexts] = useState([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { totalQuantity, openCart } = useCart();
 
+  const router   = useRouter();
+  const pathname = usePathname();
+
+  // Track login state on each route change
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  useEffect(() => {
+    setIsLoggedIn(!!localStorage.getItem('token'));
+  }, [pathname]);
+
+  // Load marquee texts
   useEffect(() => {
     api.get('/site-settings')
       .then(res => setTexts(res.data.marqueeTexts || []))
@@ -23,8 +36,18 @@ export default function Navbar() {
   }, []);
 
   const toggleMobileMenu = () => {
-    setMobileMenuOpen(open => !open);
+    setMobileMenuOpen(o => !o);
   };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    delete api.defaults.headers.common['Authorization'];
+    setIsLoggedIn(false);
+    router.push('/');
+  };
+
+  // Build login link with redirect back
+  const loginHref = `/login?redirect=${encodeURIComponent(pathname)}`;
 
   return (
     <>
@@ -49,9 +72,25 @@ export default function Navbar() {
           <button type="button"><FiSearch size={20} /></button>
         </div>
         <div className="links">
-          <Link href="/wishlist"><FiHeart size={20} /> Wishlist</Link>
-          <Link href="/account"><FiUser size={20} /> Account</Link>
-          <Link href="/cart"><FiShoppingCart size={20} /> Cart</Link>
+          {isLoggedIn ? (
+            <Link href="/" className="nav-logout" onClick={handleLogout}>
+              <FiUser size={20} /> Logout
+            </Link>
+          ) : (
+            <Link href={loginHref}>
+              <FiUser size={20} /> Login
+            </Link>
+          )}
+
+          <button
+            className="cart-button"
+            onClick={openCart}
+          >
+            <FiShoppingCart size={20} /> Cart
+            {totalQuantity > 0 && (
+              <span className="cart-badge">{totalQuantity}</span>
+            )}
+          </button>
         </div>
       </div>
 
@@ -66,9 +105,22 @@ export default function Navbar() {
           </button>
           <Link href="/"><img src="/assets/logo.png" alt="Logo" className="mobile-logo" /></Link>
           <div className="icons">
-            <Link href="/wishlist"><FiHeart size={20} /></Link>
-            <Link href="/account"><FiUser size={20} /></Link>
-            <Link href="/cart"><FiShoppingCart size={20} /></Link>
+            {isLoggedIn ? (
+              <button className="nav-logout" onClick={handleLogout}>
+                <FiUser size={20} />
+              </button>
+            ) : (
+              <Link href={loginHref}><FiUser size={20} /></Link>
+            )}
+            <button
+              className="cart-button"
+              onClick={openCart}
+            >
+              <FiShoppingCart size={20} />
+              {totalQuantity > 0 && (
+                <span className="cart-badge">{totalQuantity}</span>
+              )}
+            </button>
           </div>
         </div>
         <div className="mobile-search">
@@ -92,7 +144,6 @@ export default function Navbar() {
 
         <Link href="/must-try">Must Try</Link>
         <Link href="/bulk-orders">Bulk Orders</Link>
-        <Link href="/blog">Blog</Link>
         <Link href="/contact">Contact</Link>
       </nav>
     </>

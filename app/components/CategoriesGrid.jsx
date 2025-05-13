@@ -2,9 +2,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import api from '../lib/api';
+import Link   from 'next/link';
+import Image  from 'next/image';
+import api    from '../lib/api';
 import '../../styles/components/CategoriesGrid.css';
 
 export default function CategoriesGrid() {
@@ -18,40 +18,25 @@ export default function CategoriesGrid() {
 
   // Dummy fallback
   const dummyCats = [
-    {
-      _id: 'dummy-veg',
-      slug: 'veg-pickles',
-      name: 'Veg Pickles',
-      image: '/assets/dummy-veg.png',
-      borderColor: '#A01d46'
-    },
-    {
-      _id: 'dummy-nonveg',
-      slug: 'non-veg-pickles',
-      name: 'Non-Veg Pickles',
-      image: '/assets/dummy-nonveg.png',
-      borderColor: '#A01d46'
-    }
+    { _id: 'veg',    slug: 'veg-pickles',    name: 'Vegetable Pickles',       image: '/assets/dummy-veg.png' },
+    { _id: 'nonveg', slug: 'non-veg-pickles',name: 'Non-Vegetable Pickles',   image: '/assets/dummy-nonveg.png' },
+    // …add more if you like
   ];
-
-  const displayCats = cats.length > 0 ? cats : dummyCats;
+  const displayCats = cats.length ? cats : dummyCats;
 
   return (
     <section className="categories-section">
-      <h2 className="categories-title">Our Loving Categories</h2>
+      <h2 className="categories-title">Love Our Categories</h2>
       <div className="categories-grid">
         {displayCats.map(cat => (
           <Link key={cat._id} href={`/shop/${cat.slug}`}>
             <div className="category-card">
-              <div
-                className="category-image-wrapper"
-                style={{ borderColor: cat.borderColor }}
-              >
+              <div className="category-image-wrapper">
                 <Image
                   src={cat.image}
                   alt={cat.name}
-                  width={120}
-                  height={120}
+                  width={100}
+                  height={100}
                 />
               </div>
               <div className="category-name">{cat.name}</div>
