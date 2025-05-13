@@ -55,7 +55,7 @@ export default function CheckoutPage() {
               onChange={handleChange}
               required
             />
-            <a href="/account/login" className="login-link">Log in</a>
+           
           </div>
           <label className="checkbox-label">
             <input

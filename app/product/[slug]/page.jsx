@@ -1,4 +1,4 @@
-'use client';
+
 
 import React, { useState, useEffect } from 'react';
 import { useParams }       from 'next/navigation';
@@ -7,6 +7,11 @@ import { useCart }         from '../../context/CartContext';
 import api                 from '../../lib/api';
 import '../../../styles/pages/Product.css';
 
+
+export async function generateStaticParams() {
+  const prods = await api.get('/products').then(r => r.data)
+  return prods.map(p => ({ slug: p.slug }))
+}
 export default function ProductPage() {
   const { slug } = useParams();
   const { addToCart } = useCart();
