@@ -1,0 +1,134 @@
+.featured-products {
+  padding: 1rem;
+}
+.featured-products h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+}
+
+/* Tabs */
+.fp-tabs {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.fp-tabs button {
+  margin: 0 .5rem;
+  padding: .5rem 1rem;
+  border: none;
+  background: #eee;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background .2s;
+}
+.fp-tabs .active,
+.fp-tabs button:hover {
+  background: #A01d46;
+  color: #fff;
+}
+
+/* Grid: 4 columns */
+.fp-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+
+/* Card */
+.fp-card {
+  border: 1px solid #e2e2e2;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.fp-image-wrapper {
+  background: #f5dee7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+.fp-info {
+  padding: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.fp-category {
+  font-size: .9rem;
+  color: #777;
+  margin-bottom: .5rem;
+}
+.fp-name {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+/* Controls */
+.fp-controls {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.fp-variant {
+  flex: 1;
+  padding: .5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.fp-qty {
+  display: flex;
+  align-items: center;
+}
+.fp-qty button {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #ccc;
+  background: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+.fp-qty span {
+  margin: 0 .5rem;
+  min-width: 24px;
+  text-align: center;
+}
+
+/* Footer */
+.fp-footer {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.fp-price {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #A01d46;
+}
+.fp-add-btn {
+  background: #A01d46;
+  color: #fff;
+  border: none;
+  padding: .5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .fp-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 900px) {
+  .fp-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 600px) {
+  .fp-grid {
+    grid-template-columns: 1fr;
+  }
+}

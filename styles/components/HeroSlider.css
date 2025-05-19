@@ -1,0 +1,39 @@
+/* styles/components/HeroSlider.css */
+
+/* Make the slider full-width, even inside a centered container */
+.hero-slider {
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  width: 100vw;
+
+  display: flex;           /* line up slides side by side */
+  overflow: hidden;        /* hide the off-screen slides */
+}
+
+/* Each slide takes up the full viewport width */
+.slide {
+  position: relative;
+  min-width: 100vw;        /* flex: 0 0 100vw */
+  height: 50vh;            /* adjust height as needed */
+  flex-shrink: 0;
+}
+
+/* Next.js Image in fill mode */
+.slide-image {
+  
+  object-position: center;
+}
+
+/* Auto-slide animation between 2 slides */
+@keyframes slideAnim {
+  0%, 45%   { transform: translateX(0); }
+  50%, 95%  { transform: translateX(-100vw); }
+  100%      { transform: translateX(0); }
+}
+
+.hero-slider {
+  animation: slideAnim 12s ease-in-out infinite;
+}
