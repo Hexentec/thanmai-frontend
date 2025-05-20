@@ -9,6 +9,8 @@ import '../../styles/pages/MustTry.css';
 
 export default function MustTryPage() {
   const [items, setItems] = useState([]);
+  const [filtered, setFiltered] = useState([]);
+  const [filters, setFilters] = useState({ inStock: true, outOfStock: false, tag: '' });
   const [viewMode, setViewMode] = useState(4);
   const [sortBy, setSortBy] = useState('featured');
 
@@ -17,6 +19,30 @@ export default function MustTryPage() {
       .then(res => setItems(res.data))
       .catch(console.error);
   }, []);
+
+  useEffect(() => {
+    let filtered = items;
+    // Availability filter
+    if (filters.inStock && !filters.outOfStock) {
+      filtered = filtered.filter(p => (p.variants[0]?.stock ?? 1) > 0);
+    } else if (!filters.inStock && filters.outOfStock) {
+      filtered = filtered.filter(p => (p.variants[0]?.stock ?? 1) <= 0);
+    }
+    // Tag filter
+    if (filters.tag) {
+      filtered = filtered.filter(p => (p.tags || []).includes(filters.tag));
+    }
+    // Sorting
+    if (sortBy === 'price-asc') {
+      filtered = [...filtered].sort((a, b) => (a.variants[0]?.discountedPrice ?? a.variants[0]?.price ?? 0) - (b.variants[0]?.discountedPrice ?? b.variants[0]?.price ?? 0));
+    } else if (sortBy === 'price-desc') {
+      filtered = [...filtered].sort((a, b) => (b.variants[0]?.discountedPrice ?? b.variants[0]?.price ?? 0) - (a.variants[0]?.discountedPrice ?? a.variants[0]?.price ?? 0));
+    }
+    setFiltered(filtered);
+  }, [items, filters, sortBy]);
+
+  // Unique tags from products
+  const tags = Array.from(new Set(items.flatMap(p => p.tags || [])));
 
   return (
     <>
@@ -27,12 +53,16 @@ export default function MustTryPage() {
           <div className="filter-section">
             <h3>Availability</h3>
             <label>
-              <input type="radio" checked readOnly />
-              In stock ({items.length})
+              <input type="radio" checked={filters.inStock && !filters.outOfStock} onChange={() => setFilters(f => ({ ...f, inStock: true, outOfStock: false }))} />
+              In stock ({items.filter(p => (p.variants[0]?.stock ?? 1) > 0).length})
             </label>
             <label>
-              <input type="radio" disabled />
-              Out of stock (0)
+              <input type="radio" checked={!filters.inStock && filters.outOfStock} onChange={() => setFilters(f => ({ ...f, inStock: false, outOfStock: true }))} />
+              Out of stock ({items.filter(p => (p.variants[0]?.stock ?? 1) <= 0).length})
+            </label>
+            <label>
+              <input type="radio" checked={filters.inStock && filters.outOfStock} onChange={() => setFilters(f => ({ ...f, inStock: true, outOfStock: true }))} />
+              All ({items.length})
             </label>
           </div>
 
@@ -46,10 +76,16 @@ export default function MustTryPage() {
             </label>
           </div>
 
-          <div className="filter-section">
-            <h3>Tag</h3>
-            <button className="tag-btn">must try</button>
-          </div>
+          {tags.length > 0 && (
+            <div className="filter-section">
+              <h3>Tag</h3>
+              {tags.map(tag => (
+                <button key={tag} className={`tag-btn${filters.tag === tag ? ' active' : ''}`} onClick={() => setFilters(f => ({ ...f, tag: f.tag === tag ? '' : tag }))}>
+                  {tag}
+                </button>
+              ))}
+            </div>
+          )}
         </aside>
 
         <section className="products-main">
@@ -57,7 +93,7 @@ export default function MustTryPage() {
 
           <div className="products-header">
             <div className="ph-info">
-              Showing {items.length} products
+              Showing {filtered.length} products
             </div>
 
             <div className="ph-view-toggle">
@@ -91,7 +127,7 @@ export default function MustTryPage() {
               gridTemplateColumns: `repeat(auto-fill, minmax(${100 / viewMode}%, 1fr))`
             }}
           >
-            {items.map(prod => {
+            {filtered.map(prod => {
               const v = prod.variants[0] || {};
               const price = (v.discountedPrice ?? v.price ?? 0).toFixed(2);
 
