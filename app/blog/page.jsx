@@ -1,36 +1,34 @@
-'use client';
-import React, { useState, useEffect } from 'react';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
-import api from '../lib/api';
-import Link from 'next/link';
-import '../../styles/pages/BlogList.css';
+"use client";
+import React, { useEffect, useState } from "react";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import api from "../lib/api";
+import "../../styles/pages/BlogList.css";
 
 export default function BlogListPage() {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    api.get('/blog-posts')
-      .then(res => setPosts(res.data))
+    api.get("/blog-posts")
+      .then((res) => setPosts(res.data))
       .catch(console.error);
   }, []);
 
   return (
     <>
-      
       <main className="blog-list-page">
         <h1>Blog</h1>
-        <ul className="blog-list">
-          {posts.map(post => (
-            <li key={post._id}>
-              <Link href={`/blog/${post.slug}`}>
-                <a>{post.title}</a>
-              </Link>
-            </li>
+        <div className="blog-list">
+          {posts.map((post) => (
+            <div key={post.slug} className="blog-list-item">
+              <img src={post.coverImage} alt={post.title} />
+              <h2>{post.title}</h2>
+              <p>{post.excerpt}</p>
+              <a href={`/blog/${post.slug}`}>Read More</a>
+            </div>
           ))}
-        </ul>
+        </div>
       </main>
-      
     </>
   );
 }

@@ -7,52 +7,38 @@ import { useCart } from '../context/CartContext';
 import api    from '../lib/api';
 import '../../styles/components/FeaturedProducts.css';
 
-export default function FeaturedProducts() {
-  const [categories, setCategories] = useState([]);
-  const [activeCat, setActiveCat]   = useState(null);
-  const [products, setProducts]     = useState([]);
+const featuredProducts = [
+  {
+    name: "Lemon Pickle",
+    image: "/assets/dummy1.png",
+    link: "/product/Lemon-Pickle",
+  },
+  {
+    name: "Boneless Chicken Pickle",
+    image: "/assets/dummy2.png",
+    link: "/product/Boneless-Chicken-Pickle",
+  },
+  {
+    name: "Test Pickle",
+    image: "/assets/dummy-veg.png",
+    link: "/product/Test-Pickle",
+  },
+];
 
-  useEffect(() => {
-    api.get('/categories')
-      .then(res => {
-        setCategories(res.data);
-        if (res.data.length) setActiveCat(res.data[0]._id);
-      })
-      .catch(console.error);
-  }, []);
-
-  useEffect(() => {
-    if (!activeCat) return;
-    api.get(`/products?category=${activeCat}&featured=true`)
-      .then(res => setProducts(res.data))
-      .catch(console.error);
-  }, [activeCat]);
-
+const FeaturedProducts = () => {
   return (
-    <section className="featured-products">
-      <h2>Featured Products</h2>
-
-      <div className="fp-tabs">
-        {categories.map(cat => (
-          <button
-            key={cat._id}
-            className={cat._id === activeCat ? 'active' : ''}
-            onClick={() => setActiveCat(cat._id)}
-          >
-            {cat.name}
-          </button>
-        ))}
-      </div>
-
-      <div className="fp-grid">
-        {products.map(prod => (
-          <FeaturedCard key={prod._id} product={prod} />
-        ))}
-      </div>
-    </section>
+    <div className="featured-products">
+      {featuredProducts.map((product) => (
+        <Link href={product.link} key={product.name} className="featured-product-card">
+          <img src={product.image} alt={product.name} />
+          <span>{product.name}</span>
+        </Link>
+      ))}
+    </div>
   );
-}
+};
 
+export default FeaturedProducts;
 
 function FeaturedCard({ product }) {
   const { addToCart } = useCart();
