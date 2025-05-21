@@ -7,38 +7,69 @@ import { useCart } from '../context/CartContext';
 import api    from '../lib/api';
 import '../../styles/components/FeaturedProducts.css';
 
-const featuredProducts = [
-  {
-    name: "Lemon Pickle",
-    image: "/assets/dummy1.png",
-    link: "/product/Lemon-Pickle",
-  },
-  {
-    name: "Boneless Chicken Pickle",
-    image: "/assets/dummy2.png",
-    link: "/product/Boneless-Chicken-Pickle",
-  },
-  {
-    name: "Test Pickle",
-    image: "/assets/dummy-veg.png",
-    link: "/product/Test-Pickle",
-  },
-];
+export default function FeaturedProducts() {
+  const [categories, setCategories] = useState([]);
+  const [activeCat, setActiveCat]   = useState(null);
+  const [products, setProducts]     = useState([]);
+  const [loading, setLoading]       = useState(false);
 
-const FeaturedProducts = () => {
+  useEffect(() => {
+    api.get('/categories')
+      .then(res => {
+        setCategories(res.data);
+        if (res.data.length) setActiveCat(res.data[0]._id);
+      })
+      .catch(console.error);
+  }, []);
+
+  useEffect(() => {
+    if (!activeCat) return;
+    setLoading(true);
+    api.get(`/products?category=${activeCat}&featured=true`)
+      .then(res => {
+        // Fallback: filter for isFeatured and correct category on frontend
+        setProducts((res.data || []).filter(p => p.isFeatured && p.category && p.category._id === activeCat));
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, [activeCat]);
+
   return (
-    <div className="featured-products">
-      {featuredProducts.map((product) => (
-        <Link href={product.link} key={product.name} className="featured-product-card">
-          <img src={product.image} alt={product.name} />
-          <span>{product.name}</span>
-        </Link>
-      ))}
-    </div>
-  );
-};
+    <section className="featured-products">
+      <h2>Featured Products</h2>
 
-export default FeaturedProducts;
+      <div className="fp-tabs" role="tablist" aria-label="Featured Product Categories">
+        {categories.map(cat => (
+          <button
+            key={cat._id}
+            className={cat._id === activeCat ? 'active' : ''}
+            onClick={() => setActiveCat(cat._id)}
+            role="tab"
+            aria-selected={cat._id === activeCat}
+            aria-controls={`fp-panel-${cat._id}`}
+            tabIndex={cat._id === activeCat ? 0 : -1}
+            style={{ fontWeight: cat._id === activeCat ? 'bold' : 'normal', borderBottom: cat._id === activeCat ? '2px solid #333' : 'none' }}
+          >
+            {cat.name}
+          </button>
+        ))}
+      </div>
+
+      <div className="fp-grid">
+        {loading ? (
+          <div style={{ padding: '2rem', textAlign: 'center', width: '100%' }}>Loading…</div>
+        ) : products.length === 0 ? (
+          <div style={{ padding: '2rem', textAlign: 'center', width: '100%' }}>No featured products found.</div>
+        ) : (
+          products.map(prod => (
+            <FeaturedCard key={prod._id} product={prod} />
+          ))
+        )}
+      </div>
+    </section>
+  );
+}
+
 
 function FeaturedCard({ product }) {
   const { addToCart } = useCart();

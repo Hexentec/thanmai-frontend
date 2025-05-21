@@ -4,6 +4,7 @@ import { useParams } from 'next/navigation';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import api from '../../lib/api';
+import blogPosts from '../../lib/blogMockData';
 import '../../../styles/pages/BlogPost.css';
 
 export default function BlogPostPage() {

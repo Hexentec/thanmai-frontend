@@ -1,34 +1,46 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import api from "../lib/api";
-import "../../styles/pages/BlogList.css";
+'use client';
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import '../../styles/pages/BlogList.css';
+import blogPosts from '../lib/blogMockData';
+import api from '../lib/api';
 
 export default function BlogListPage() {
-  const [posts, setPosts] = useState([]);
+  // Always use mock data
+  const posts = blogPosts;
 
-  useEffect(() => {
-    api.get("/blog-posts")
-      .then((res) => setPosts(res.data))
-      .catch(console.error);
-  }, []);
+  // Helper to get excerpt from HTML content
+  function getExcerpt(html, wordCount = 30) {
+    const text = html.replace(/<[^>]+>/g, '');
+    const words = text.split(' ');
+    if (words.length <= wordCount) return text;
+    return words.slice(0, wordCount).join(' ') + '...';
+  }
 
   return (
-    <>
-      <main className="blog-list-page">
-        <h1>Blog</h1>
-        <div className="blog-list">
-          {posts.map((post) => (
-            <div key={post.slug} className="blog-list-item">
-              <img src={post.coverImage} alt={post.title} />
-              <h2>{post.title}</h2>
-              <p>{post.excerpt}</p>
-              <a href={`/blog/${post.slug}`}>Read More</a>
-            </div>
+    <main className="blog-list-page">
+      <h1>Blog</h1>
+      {posts.length === 0 ? (
+        <p style={{ textAlign: 'center', margin: '2rem 0' }}>No blog posts found.</p>
+      ) : (
+        <ul className="blog-list blog-list-grid">
+          {posts.map(post => (
+            <li key={post._id} className="blog-list-item blog-card">
+              <Link
+                href={`/blog/${post.slug}`}
+                aria-label={`Read blog post: ${post.title}`}
+                style={{ display: 'block', textDecoration: 'none', color: 'inherit' }}
+              >
+                <div className="blog-list-cover">
+                  <img src={post.coverImage} alt={post.title} />
+                </div>
+                <h2 className="blog-title">{post.title}</h2>
+                <p className="blog-excerpt">{getExcerpt(post.content)}</p>
+              </Link>
+            </li>
           ))}
-        </div>
-      </main>
-    </>
+        </ul>
+      )}
+    </main>
   );
 }
