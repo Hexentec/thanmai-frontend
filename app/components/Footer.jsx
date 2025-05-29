@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import ImageWithFallback from './ImageWithFallback';
 import {
   FiFacebook,
   FiInstagram,
@@ -20,7 +21,7 @@ export default function Footer() {
         {/* Section 1: Logo & About */}
         <div className="footer-section">
           <div className="footer-logo">
-            <Link href="/"><Image src="/assets/logo.png" alt="Logo" width={120} height={60} /></Link>
+            <Link href="/"><ImageWithFallback src="/assets/logo.png" alt="Logo" width={120} height={60} nextImage={true} /></Link>
           </div>
           <p className="footer-about">
             Thanmai Home Foods brings you the finest handcrafted pickles, made fresh in small batches with traditional recipes and pure ingredients.

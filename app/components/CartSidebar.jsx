@@ -1,11 +1,11 @@
 // src/components/CartSidebar.jsx
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import { useCart } from '../context/CartContext';
-import Image from 'next/image';
+import ImageWithFallback from './ImageWithFallback';
 import { FiTrash2 } from 'react-icons/fi';
 import '../../styles/components/CartSidebar.css';
 
@@ -18,6 +18,9 @@ export default function CartSidebar() {
     updateQuantity,
     removeFromCart,
   } = useCart();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => { setMounted(true); }, []);
 
   // Calculate subtotal
   const subtotal = cart
@@ -38,7 +41,7 @@ export default function CartSidebar() {
     }
   };
 
-  if (typeof document === 'undefined') return null;
+  if (!mounted) return null;
   return createPortal(
     <div className={`cs-overlay ${isOpen ? 'open' : ''}`}>
       <div className="cs-drawer">
@@ -56,12 +59,13 @@ export default function CartSidebar() {
               className="cs-item"
               key={product._id + variant.weight}
             >
-              <Image
+              <ImageWithFallback
                 src={product.images?.[0] || '/assets/placeholder.png'}
                 alt={product.name}
                 width={60}
                 height={60}
                 className="cs-item-img"
+                nextImage={true}
               />
               <div className="cs-item-info">
                 <strong>{product.name}</strong>

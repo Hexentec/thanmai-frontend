@@ -5,6 +5,7 @@ import useProductFilter from '../lib/useProductFilter';
 
 import Link   from 'next/link';
 import Image  from 'next/image';
+import ImageWithFallback from '../components/ImageWithFallback';
 import api    from '../lib/api';
 import '../../styles/pages/MustTry.css';
 
@@ -115,11 +116,12 @@ export default function MustTryPage() {
                 <div key={prod._id} className="product-card">
                   <Link href={`/product/${prod.slug}`} className="pc-image">
                    
-                      <Image
+                      <ImageWithFallback
                         src={prod.images[0] || '/assets/placeholder.png'}
                         alt={prod.name}
                         fill
                         style={{ objectFit: 'cover' }}
+                        nextImage={true}
                       />
                    
                   </Link>

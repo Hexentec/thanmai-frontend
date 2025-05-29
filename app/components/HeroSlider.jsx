@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import ImageWithFallback from './ImageWithFallback';
 import api from '../lib/api';
 import '../../styles/components/HeroSlider.css';
 
@@ -28,13 +29,14 @@ export default function HeroSlider() {
     <section className="hero-slider" aria-label="Featured Pickles" role="region">
       {finalSlides.map(({ key, src }) => (
         <div key={key} className="slide" role="group" aria-roledescription="slide">
-          <Image
+          <ImageWithFallback
             src={src}
             alt="Delicious homemade pickles"
             fill
             className="slide-image"
             sizes="100vw"
             priority
+            nextImage={true}
           />
           {/* Optionally add overlay for future text/buttons */}
           {/* <div className="slide-overlay">Your text or CTA here</div> */}

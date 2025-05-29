@@ -11,7 +11,11 @@ const nextConfig = {
         //     pathname: '/**',
         //   },
         // ],
-      },
+    },
+    // Remove allowDevelopmentBuild for production builds
+    // experimental: {
+    //     allowDevelopmentBuild: true
+    // }
 };
 
 export default nextConfig;

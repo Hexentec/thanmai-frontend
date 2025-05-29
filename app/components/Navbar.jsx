@@ -13,6 +13,7 @@ import {
 import { useCart } from '../context/CartContext';
 import api from '../lib/api';
 import '../../styles/components/Navbar.css';
+import ImageWithFallback from './ImageWithFallback';
 
 export default function Navbar() {
   const [texts, setTexts] = useState([]);
@@ -72,7 +73,7 @@ export default function Navbar() {
       {/* Desktop Middle Nav */}
       <nav className="navbar-middle navbar-desktop" aria-label="Main Navigation">
         <div className="logo">
-          <Link href="/" aria-label="Home"><img src="/assets/logo.png" alt="Thanmai Home Foods Logo" /></Link>
+          <Link href="/" aria-label="Home"><ImageWithFallback src="/assets/logo.png" alt="Thanmai Home Foods Logo" nextImage={false} /></Link>
         </div>
         <form className="search" role="search" aria-label="Search Pickles" onSubmit={e => e.preventDefault()}>
           <input type="text" placeholder="Search pickles." aria-label="Search pickles" />
@@ -114,7 +115,7 @@ export default function Navbar() {
           >
             <FiMenu size={28} />
           </button>
-          <Link href="/" aria-label="Home"><img src="/assets/logo.png" alt="Thanmai Home Foods Logo" className="mobile-logo" /></Link>
+          <Link href="/" aria-label="Home"><ImageWithFallback src="/assets/logo.png" alt="Thanmai Home Foods Logo" className="mobile-logo" nextImage={false} /></Link>
           <div className="icons">
             {isLoggedIn ? (
               <Link href="/" className="nav-logout" onClick={handleLogout} aria-label="Logout">

@@ -1,18 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import ImageWithFallback from './ImageWithFallback';
 
 const YOUTUBE_RSS_URL = '/api/youtube-latest';
 const CHANNEL_URL = 'https://www.youtube.com/@Thanmaihomefoods';
-
-function timeAgo(dateString) {
-  const date = new Date(dateString);
-  const now = new Date();
-  const diff = Math.floor((now - date) / 1000);
-  if (diff < 60) return `${diff} seconds ago`;
-  if (diff < 3600) return `${Math.floor(diff / 60)} minutes ago`;
-  if (diff < 86400) return `${Math.floor(diff / 3600)} hours ago`;
-  if (diff < 604800) return `${Math.floor(diff / 86400)} days ago`;
-  return date.toLocaleDateString();
-}
 
 export default function YouTubeGallery() {
   const [videos, setVideos] = useState([]);
@@ -21,6 +11,11 @@ export default function YouTubeGallery() {
   const [channel, setChannel] = useState({ name: '', url: CHANNEL_URL });
   const [showModal, setShowModal] = useState(false);
   const [modalVideo, setModalVideo] = useState(null);
+  const [now, setNow] = useState(null);
+
+  useEffect(() => {
+    setNow(new Date());
+  }, []);
 
   useEffect(() => {
     async function fetchVideos() {
@@ -75,6 +70,17 @@ export default function YouTubeGallery() {
     setModalVideo(null);
   };
 
+  function timeAgo(dateString, now) {
+    if (!now) return '';
+    const date = new Date(dateString);
+    const diff = Math.floor((now - date) / 1000);
+    if (diff < 60) return `${diff} seconds ago`;
+    if (diff < 3600) return `${Math.floor(diff / 60)} minutes ago`;
+    if (diff < 86400) return `${Math.floor(diff / 3600)} hours ago`;
+    if (diff < 604800) return `${Math.floor(diff / 86400)} days ago`;
+    return date.toLocaleDateString();
+  }
+
   return (
     <section className="youtube-gallery-section" aria-label="Latest YouTube Videos" role="region" style={{marginBottom: '2.5rem'}}>
       {/* Channel Info */}
@@ -99,11 +105,12 @@ export default function YouTubeGallery() {
             onKeyDown={e => { if (e.key === 'Enter') openModal(video); }}
           >
             <div className="youtube-gallery-thumb-wrapper">
-              <img
+              <ImageWithFallback
                 src={video.thumbnail}
                 alt={video.title}
                 className="youtube-gallery-thumb"
                 loading="lazy"
+                nextImage={false}
               />
               <span className="youtube-gallery-play">▶</span>
               {video.duration && (
@@ -112,7 +119,7 @@ export default function YouTubeGallery() {
             </div>
             <div className="youtube-gallery-title">{video.title}</div>
             <div style={{ color: '#666', fontSize: '0.98rem', margin: '0 1rem 0.5rem 1rem', textAlign: 'center' }}>{video.description.slice(0, 80)}{video.description.length > 80 ? '…' : ''}</div>
-            <div style={{ color: '#888', fontSize: '0.92rem', marginBottom: '0.7rem', textAlign: 'center' }}>{video.published ? timeAgo(video.published) : ''}</div>
+            <div style={{ color: '#888', fontSize: '0.92rem', marginBottom: '0.7rem', textAlign: 'center' }}>{video.published ? timeAgo(video.published, now) : ''}</div>
           </div>
         ))}
       </div>
@@ -150,7 +157,7 @@ export default function YouTubeGallery() {
             <div style={{ padding: '1rem', textAlign: 'center' }}>
               <div style={{ fontWeight: 600, fontSize: '1.1rem', color: '#A01d46', marginBottom: 6 }}>{modalVideo.title}</div>
               <div style={{ color: '#666', fontSize: '0.98rem', marginBottom: 8 }}>{modalVideo.description}</div>
-              <div style={{ color: '#888', fontSize: '0.92rem' }}>{modalVideo.published ? timeAgo(modalVideo.published) : ''}</div>
+              <div style={{ color: '#888', fontSize: '0.92rem' }}>{modalVideo.published ? timeAgo(modalVideo.published, now) : ''}</div>
             </div>
           </div>
         </div>

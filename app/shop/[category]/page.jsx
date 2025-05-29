@@ -1,15 +1,16 @@
 // app/shop/[category]/page.jsx
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import ImageWithFallback from '../../components/ImageWithFallback';
 import api from '../../lib/api';
 import '../../../styles/pages/Category.css';
 import useProductFilter from '../../lib/useProductFilter';
 
 export default function ShopCategoryPage({ params }) {
-  const slug = params.category;
+  const { category: slug } = use(params);
   const [cats, setCats] = useState([]);
   const [cat, setCat] = useState(null);
   const [products, setProducts] = useState([]);
@@ -120,11 +121,12 @@ export default function ShopCategoryPage({ params }) {
             return (
               <div key={prod._id} className="product-card">
                 <Link href={`/product/${prod.slug}`} className="pc-image">
-                  <Image
+                  <ImageWithFallback
                     src={prod.images[0] || '/assets/placeholder.png'}
                     alt={prod.name}
                     fill
                     style={{ objectFit: 'cover' }}
+                    nextImage={true}
                   />
                 </Link>
                 <div className="pc-body">

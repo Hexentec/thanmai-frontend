@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link   from 'next/link';
 import Image  from 'next/image';
+import ImageWithFallback from './ImageWithFallback';
 import { useCart } from '../context/CartContext';
 import api    from '../lib/api';
 import '../../styles/components/FeaturedProducts.css';
@@ -70,6 +71,12 @@ export default function FeaturedProducts() {
   );
 }
 
+function normalizeSlug(slug) {
+  return slug
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
 
 function FeaturedCard({ product }) {
   const { addToCart } = useCart();
@@ -102,8 +109,8 @@ function FeaturedCard({ product }) {
   return (
     <div className="fp-card" role="listitem" aria-label={product.name}>
       <div className="fp-image-wrapper">
-        <Link href={`/product/${product.slug}`} aria-label={product.name}>
-          <Image src={imgSrc} alt={product.name} width={300} height={300} className="fp-image" priority />
+        <Link href={`/product/${normalizeSlug(product.slug)}`} aria-label={product.name}>
+          <ImageWithFallback src={imgSrc} alt={product.name} width={300} height={300} className="fp-image" priority nextImage={true} />
         </Link>
         {/* Optionally add badge for discount */}
         {hasDiscount && <span className="fp-discount-badge">Sale</span>}
@@ -113,7 +120,7 @@ function FeaturedCard({ product }) {
         <p className="fp-category">{product.category?.name}</p>
 
         <h3 className="fp-name">
-          <Link href={`/product/${product.slug}`} aria-label={product.name}>
+          <Link href={`/product/${normalizeSlug(product.slug)}`} aria-label={product.name}>
             {product.name}
           </Link>
         </h3>

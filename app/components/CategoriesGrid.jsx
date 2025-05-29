@@ -4,6 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import Link   from 'next/link';
 import Image  from 'next/image';
+import ImageWithFallback from './ImageWithFallback';
 import api    from '../lib/api';
 import '../../styles/components/CategoriesGrid.css';
 
@@ -32,13 +33,14 @@ export default function CategoriesGrid() {
           <Link key={cat._id} href={`/shop/${cat.slug}`} role="listitem" aria-label={cat.name}>
             <div className="category-card">
               <div className="category-image-wrapper">
-                <Image
-                  src={cat.image}
+                <ImageWithFallback
+                  src={cat.image || '/assets/placeholder.png'}
                   alt={cat.name}
                   width={100}
                   height={100}
                   className="category-image"
                   priority
+                  nextImage={true}
                 />
                 {/* Optionally add overlay for future text/icons */}
                 {/* <div className="category-overlay">Shop Now</div> */}

@@ -8,23 +8,25 @@ export const useCart = () => useContext(CartContext);
 
 export function CartProvider({ children }) {
   // initialize from localStorage
-  const [cart, setCart] = useState(() => {
-    if (typeof window === 'undefined') return [];
-    try {
-      return JSON.parse(localStorage.getItem('cart')) || [];
-    } catch {
-      return [];
-    }
-  });
-
+  const [cart, setCart] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+    try {
+      setCart(JSON.parse(localStorage.getItem('cart')) || []);
+    } catch {
+      setCart([]);
+    }
+  }, []);
 
   // persist to localStorage on change
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (isClient) {
       localStorage.setItem('cart', JSON.stringify(cart));
     }
-  }, [cart]);
+  }, [cart, isClient]);
 
   const openCart  = () => setIsOpen(true);
   const closeCart = () => setIsOpen(false);

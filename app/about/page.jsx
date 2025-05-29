@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 
 import WhyUs       from '../components/WhyUs';
 import Image       from 'next/image';
+import ImageWithFallback from '../components/ImageWithFallback';
 import api         from '../lib/api';
 import '../../styles/pages/About.css';
 
@@ -62,13 +63,14 @@ export default function AboutPage() {
             {testimonials.map(t => (
               <div key={t._id} className="testimonial-card" role="listitem" aria-label={t.authorName}>
                 {t.authorPhoto && (
-                  <Image
+                  <ImageWithFallback
                     src={t.authorPhoto}
                     alt={t.authorName}
                     width={60}
                     height={60}
                     className="tc-avatar"
                     priority
+                    nextImage={true}
                   />
                 )}
                 <div className="tc-body">

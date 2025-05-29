@@ -1,40 +1,18 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { useParams }       from 'next/navigation';
-import Image               from 'next/image';
+import React, { useState } from 'react';
+import ImageWithFallback   from '../../components/ImageWithFallback';
 import { useCart }         from '../../context/CartContext';
-import api                 from '../../lib/api';
 import '../../../styles/pages/Product.css';
 
-
-
-export default function ProductPage({ slug }) {
- 
+export default function ProductPage({ product }) {
   const { addToCart } = useCart();
-
-  const [product, setProduct]   = useState(null);
-  const [mainImage, setMainImage] = useState('');
-  const [selectedWeight, setSelectedWeight] = useState('');
+  const [mainImage, setMainImage] = useState(product?.images?.[0] || '/assets/placeholder.png');
+  const [selectedWeight, setSelectedWeight] = useState(product?.variants?.[0]?.weight || '');
   const [quantity, setQuantity] = useState(1);
 
-  useEffect(() => {
-    api.get('/products')
-      .then(res => {
-        const p = res.data.find(p => p.slug === slug);
-        if (p) {
-          setProduct(p);
-          setMainImage(p.images[0] || '/assets/placeholder.png');
-          if (p.variants.length) {
-            setSelectedWeight(p.variants[0].weight);
-          }
-        }
-      })
-      .catch(console.error);
-  }, [slug]);
-
   if (!product) {
-    return <p className="pd-loading">Loading…</p>;
+    return <p className="pd-loading">Product not found.</p>;
   }
 
   const variant = product.variants.find(v => v.weight === selectedWeight) || product.variants[0];
@@ -53,11 +31,12 @@ export default function ProductPage({ slug }) {
     <div className="product-page">
       <div className="pd-gallery">
         <div className="pd-main">
-          <Image
+          <ImageWithFallback
             src={mainImage}
             alt={product.name}
             fill
             style={{ objectFit: 'contain' }}
+            nextImage={true}
           />
         </div>
         <div className="pd-thumbs">
@@ -67,7 +46,7 @@ export default function ProductPage({ slug }) {
               className={`pd-thumb ${img===mainImage?'active':''}`}
               onClick={()=> setMainImage(img)}
             >
-              <Image src={img} alt={`${product.name} ${i}`} width={80} height={80}/>
+              <ImageWithFallback src={img} alt={`${product.name} ${i}`} width={80} height={80} nextImage={true}/>
             </div>
           ))}
         </div>
@@ -83,11 +62,6 @@ export default function ProductPage({ slug }) {
         <div className="pd-price-section">
           <span className="pd-price">Rs. {unitPrice.toFixed(2)}</span>
         </div>
-
-       {/* <div className="pd-fb-section">
-          <h3>Frequently Bought Together</h3>
-          {/* You can inject a list here 
-        </div> */}
 
         <hr/>
 
@@ -151,7 +125,6 @@ export default function ProductPage({ slug }) {
             <summary>Shipping and return</summary>
             <p>Standard shipping estimate and returns.</p>
           </details>
-          
         </div>
       </div>
     </div>

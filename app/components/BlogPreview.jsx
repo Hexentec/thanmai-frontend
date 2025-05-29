@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import blogPosts from '../lib/blogMockData';
 import '../../styles/pages/BlogList.css';
+import ImageWithFallback from './ImageWithFallback';
 
 export default function BlogPreview() {
   // Show the latest 3 posts
@@ -27,7 +28,7 @@ export default function BlogPreview() {
               style={{ display: 'block', textDecoration: 'none', color: 'inherit' }}
             >
               <div className="blog-list-cover">
-                <img src={post.coverImage} alt={post.title} />
+                <ImageWithFallback src={post.coverImage} alt={post.title} nextImage={false} />
               </div>
               <h3 className="blog-title">{post.title}</h3>
               <p className="blog-excerpt">{getExcerpt(post.content)}</p>
