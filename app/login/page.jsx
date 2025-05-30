@@ -5,6 +5,8 @@ import Link             from 'next/link';
 import api              from '../lib/api';
 import '../../styles/pages/Auth.css';
 import ImageWithFallback from '../components/ImageWithFallback';
+import { motion } from 'framer-motion';
+import { fade } from '../lib/animationVariants';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -47,53 +49,55 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="auth-page">
-      <form className="auth-form" onSubmit={handleSubmit}>
-        <ImageWithFallback src="/assets/logo.png" alt="Thanmai Home Foods" className="auth-logo" nextImage={false} />
-        <h1>Login</h1>
+    <motion.div variants={fade} initial="hidden" animate="visible">
+      <div className="auth-page">
+        <form className="auth-form" onSubmit={handleSubmit}>
+          <ImageWithFallback src="/assets/logo.png" alt="Thanmai Home Foods" className="auth-logo" nextImage={false} />
+          <h1>Login</h1>
 
-        <label>
-          Email
-          <input
-            type="email"
-            name="email"
-            value={form.email}
-            onChange={handleChange}
-            required
-          />
-        </label>
+          <label>
+            Email
+            <input
+              type="email"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              required
+            />
+          </label>
 
-        <label>
-          Password
-          <input
-            type="password"
-            name="password"
-            value={form.password}
-            onChange={handleChange}
-            required
-          />
-        </label>
+          <label>
+            Password
+            <input
+              type="password"
+              name="password"
+              value={form.password}
+              onChange={handleChange}
+              required
+            />
+          </label>
 
-        <label className="checkbox-label">
-          <input
-            type="checkbox"
-            name="acceptTnC"
-            checked={form.acceptTnC}
-            onChange={handleChange}
-          />
-          I accept the <Link href="/terms">Terms &amp; Conditions</Link>
-        </label>
+          <label className="checkbox-label">
+            <input
+              type="checkbox"
+              name="acceptTnC"
+              checked={form.acceptTnC}
+              onChange={handleChange}
+            />
+            I accept the <Link href="/terms">Terms &amp; Conditions</Link>
+          </label>
 
-        <button type="submit" disabled={loading}>
-          {loading ? 'Logging in…' : 'Log In'}
-        </button>
+          <button type="submit" disabled={loading}>
+            {loading ? 'Logging in…' : 'Log In'}
+          </button>
 
-        <div className="links">
-          <Link href="/forgot-password">Forgot password?</Link>
-          <span>·</span>
-          <Link href="/register">Create account</Link>
-        </div>
-      </form>
-    </div>
+          <div className="links">
+            <Link href="/forgot-password">Forgot password?</Link>
+            <span>·</span>
+            <Link href="/register">Create account</Link>
+          </div>
+        </form>
+      </div>
+    </motion.div>
   );
 }

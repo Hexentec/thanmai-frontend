@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { useCart } from '../context/CartContext';
 import '../../styles/pages/Checkout.css';
+import ImageWithFallback from '../components/ImageWithFallback';
 
 export default function CheckoutPage() {
   const { cart } = useCart();
@@ -201,7 +202,7 @@ export default function CheckoutPage() {
               <span>UPI</span>&nbsp;<span>Visa</span>&nbsp;<span>MC</span>&nbsp;<span>+14</span>
             </div>
             <p className="payment-note">
-              After clicking “Pay now”, you will be redirected to Razorpay Secure to complete your purchase.
+              After clicking "Pay now", you will be redirected to Razorpay Secure to complete your purchase.
             </p>
           </div>
 
@@ -240,7 +241,7 @@ export default function CheckoutPage() {
           <div className="cart-summary">
             {cart.map(item => (
               <div key={item.product._id + item.variant.weight} className="cart-item">
-                <img src={item.product.images[0]} alt={item.product.name} />
+                <ImageWithFallback src={item.product.images[0]} alt={item.product.name} nextImage={false} />
                 <div className="item-details">
                   <strong>{item.product.name}</strong>
                   <small>{item.variant.weight}</small>

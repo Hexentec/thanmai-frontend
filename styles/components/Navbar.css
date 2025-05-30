@@ -225,28 +225,44 @@
 
 /* === Bottom Nav (Shared) === */
 .navbar-bottom {
-  background: #fff;
+  background: #ffd6db;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  padding: 0.2rem 0.5rem;
-  border-bottom: 1px solid #eaeaea;
-  gap: 1rem;
-  transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.3s;
-  max-height: 54px;
-  opacity: 1;
-  overflow: hidden;
+  padding: 0.12rem 0.5rem;
+  border-bottom: 1.5px solid #eab1c1;
+  gap: 0.7rem;
+  border-radius: 0;
+  box-shadow: 0 4px 18px 0 rgba(160,29,70,0.07);
+  font-size: 0.84rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  margin: 0;
+  max-width: none;
+  width: 100%;
+  transition: box-shadow 0.2s, background 0.2s;
 }
 .navbar-bottom a,
 .navbar-bottom .dropdown > span {
-  color: #333;
-  font-weight: bold;
+  color: #A01d46;
+  font-weight: 700;
+  font-size: 1.08em;
   cursor: pointer;
+  padding: 0.45em 1.1em;
+  border-radius: 8px;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+  text-decoration: none;
+  position: relative;
 }
 .navbar-bottom a:hover,
-.navbar-bottom .dropdown > span:hover {
-  color: #A01d46;
+.navbar-bottom .dropdown > span:hover,
+.navbar-bottom a:focus,
+.navbar-bottom .dropdown > span:focus {
+  background: #ffe6ec;
+  color: #a01d46;
+  text-decoration: underline;
+  box-shadow: 0 2px 8px 0 rgba(160,29,70,0.08);
 }
 
 /* Dropdown menu */
@@ -258,20 +274,41 @@
   position: absolute;
   top: 100%;
   left: 0;
-  background: #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-  z-index: 10;
+  background: #ffd6db;
+  box-shadow: 0 8px 24px 0 rgba(160,29,70,0.10);
+  z-index: 1000;
+  border: 1.5px solid #eab1c1;
+  min-width: 190px;
+  border-radius: 0 0 14px 14px;
+  margin-top: 0.2em;
+  padding: 0.3em 0;
+  transition: box-shadow 0.18s, background 0.18s;
 }
 .dropdown .dropdown-menu a {
   display: block;
-  padding: 0.5rem 1rem;
+  padding: 0.6em 1.2em;
   white-space: nowrap;
-  color: #333;
+  color: #A01d46;
+  font-weight: 600;
+  border-radius: 6px;
+  font-size: 1em;
+  transition: background 0.18s, color 0.18s;
 }
-.dropdown .dropdown-menu a:hover {
-  background: #f5f5f5;
+.dropdown .dropdown-menu a:hover,
+.dropdown .dropdown-menu a:focus {
+  background: #ffe6ec;
+  color: #a01d46;
 }
-.dropdown:hover .dropdown-menu {
+.dropdown:focus-within .dropdown-menu,
+.dropdown:active .dropdown-menu,
+.dropdown .dropdown-menu:focus,
+.dropdown .dropdown-menu:active {
+  display: block;
+}
+
+/* Show dropdown on hover for desktop */
+.navbar-bottom .dropdown:hover .dropdown-menu,
+.navbar-bottom .dropdown:focus-within .dropdown-menu {
   display: block;
 }
 
@@ -283,25 +320,53 @@
   }
   /* show when toggled */
   .navbar-bottom.mobile-open {
-    display: flex;
-    flex-direction: column;
-    background: #A01d46;
-    padding: 0.5rem;
-    gap: 1rem;
+    background: #ffd6db;
+    border-radius: 0;
+    box-shadow: 0 4px 18px 0 rgba(160,29,70,0.07);
+    margin-bottom: 0.7rem;
+    padding: 0.12rem 0.5rem;
+    width: 100%;
+    font-size: 0.84rem;
   }
   .navbar-bottom.mobile-open a,
   .navbar-bottom.mobile-open .dropdown > span {
-    color: #fff;
-    margin: 0;
+    color: #A01d46;
+    font-weight: 700;
+    font-size: 1.08em;
+    padding: 0.45em 1.1em;
+    border-radius: 8px;
+    transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+  }
+  .navbar-bottom.mobile-open a:hover,
+  .navbar-bottom.mobile-open .dropdown > span:hover,
+  .navbar-bottom.mobile-open a:focus,
+  .navbar-bottom.mobile-open .dropdown > span:focus {
+    background: #ffe6ec;
+    color: #a01d46;
+    text-decoration: underline;
+    box-shadow: 0 2px 8px 0 rgba(160,29,70,0.08);
   }
   .navbar-bottom.mobile-open .dropdown-menu {
     position: static;
     box-shadow: none;
-    background: transparent;
+    background: #ffd6db;
+    border-radius: 0 0 14px 14px;
+    border: 1.5px solid #eab1c1;
+    margin-top: 0.2em;
+    padding: 0.3em 0;
   }
   .navbar-bottom.mobile-open .dropdown-menu a {
-    padding-left: 1rem;
-    color: #fff;
+    padding-left: 1.2em;
+    color: #A01d46;
+    font-weight: 600;
+    border-radius: 6px;
+    font-size: 1em;
+    transition: background 0.18s, color 0.18s;
+  }
+  .navbar-bottom.mobile-open .dropdown-menu a:hover,
+  .navbar-bottom.mobile-open .dropdown-menu a:focus {
+    background: #ffe6ec;
+    color: #a01d46;
   }
 }
 

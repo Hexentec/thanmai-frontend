@@ -8,6 +8,7 @@ import { useCart } from '../context/CartContext';
 import ImageWithFallback from './ImageWithFallback';
 import { FiTrash2 } from 'react-icons/fi';
 import '../../styles/components/CartSidebar.css';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function CartSidebar() {
   const router = useRouter();
@@ -24,11 +25,18 @@ export default function CartSidebar() {
 
   // Calculate subtotal
   const subtotal = cart
-    .reduce(
-      (sum, { variant, quantity }) =>
-        sum + (variant.discountedPrice || variant.price) * quantity,
-      0
-    )
+    .reduce((sum, { variant, quantity }) => {
+      const price = variant.price;
+      const discounted = variant.discountedPrice;
+      if (!discounted || discounted === price) {
+        return sum + price * quantity;
+      }
+      const discountFraction = (price - discounted) / price;
+      if (discountFraction > 0.5) {
+        return sum + price * quantity;
+      }
+      return sum + discounted * quantity;
+    }, 0)
     .toFixed(2);
 
   const handleCheckout = () => {
@@ -43,96 +51,127 @@ export default function CartSidebar() {
 
   if (!mounted) return null;
   return createPortal(
-    <div className={`cs-overlay ${isOpen ? 'open' : ''}`}>
-      <div className="cs-drawer">
-        <header className="cs-header">
-          <h2>Shopping cart</h2>
-          <button className="cs-close" onClick={closeCart}>×</button>
-        </header>
-
-        <div className="cs-items">
-          {cart.length === 0 && (
-            <p className="cs-empty">Your cart is empty.</p>
-          )}
-          {cart.map(({ product, variant, quantity }) => (
-            <div
-              className="cs-item"
-              key={product._id + variant.weight}
-            >
-              <ImageWithFallback
-                src={product.images?.[0] || '/assets/placeholder.png'}
-                alt={product.name}
-                width={60}
-                height={60}
-                className="cs-item-img"
-                nextImage={true}
-              />
-              <div className="cs-item-info">
-                <strong>{product.name}</strong>
-                <small>{variant.weight}</small>
-                <div className="cs-qty">
-                  <button
-                    onClick={() =>
-                      updateQuantity(
-                        product._id,
-                        variant.weight,
-                        quantity - 1
-                      )
-                    }
-                    disabled={quantity <= 1}
-                  >
-                    –
-                  </button>
-                  <span>{quantity}</span>
-                  <button
-                    onClick={() =>
-                      updateQuantity(
-                        product._id,
-                        variant.weight,
-                        quantity + 1
-                      )
-                    }
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-              <div className="cs-item-right">
-                <span>
-                  Rs.{' '}
-                  {(
-                    (variant.discountedPrice || variant.price) * quantity
-                  ).toFixed(2)}
-                </span>
-                <button
-                  className="cs-remove"
-                  onClick={() =>
-                    removeFromCart(product._id, variant.weight)
-                  }
-                  aria-label="Remove item"
-                >
-                  <FiTrash2 size={18} />
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <footer className="cs-footer">
-          <div className="cs-subtotal">
-            <strong>Subtotal</strong>
-            <span>Rs. {subtotal}</span>
-          </div>
-          <button
-            className="cs-checkout"
-            disabled={cart.length === 0}
-            onClick={handleCheckout}
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          className={`cs-overlay open`}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <motion.div
+            className="cs-drawer"
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
           >
-            Checkout
-          </button>
-        </footer>
-      </div>
-    </div>,
+            <header className="cs-header">
+              <h2>Shopping cart</h2>
+              <motion.button className="cs-close" onClick={closeCart} whileTap={{ scale: 0.9 }}>×</motion.button>
+            </header>
+            <div className="cs-items">
+              {cart.length === 0 && (
+                <p className="cs-empty">Your cart is empty.</p>
+              )}
+              {cart.map(({ product, variant, quantity }) => (
+                <div
+                  className="cs-item"
+                  key={product._id + variant.weight}
+                >
+                  <ImageWithFallback
+                    src={product.images?.[0] || '/assets/placeholder.png'}
+                    alt={product.name}
+                    width={60}
+                    height={60}
+                    className="cs-item-img"
+                    nextImage={true}
+                  />
+                  <div className="cs-item-info">
+                    <strong>{product.name}</strong>
+                    <small>{variant.weight}</small>
+                    <div className="cs-qty">
+                      <motion.button
+                        onClick={() =>
+                          updateQuantity(
+                            product._id,
+                            variant.weight,
+                            quantity - 1
+                          )
+                        }
+                        disabled={quantity <= 1}
+                        whileTap={{ scale: 0.9 }}
+                      >
+                        –
+                      </motion.button>
+                      <span>{quantity}</span>
+                      <motion.button
+                        onClick={() =>
+                          updateQuantity(
+                            product._id,
+                            variant.weight,
+                            quantity + 1
+                          )
+                        }
+                        whileTap={{ scale: 0.9 }}
+                      >
+                        +
+                      </motion.button>
+                    </div>
+                  </div>
+                  <div className="cs-item-right">
+                    <span>
+                      {(() => {
+                        const price = variant.price;
+                        const discounted = variant.discountedPrice;
+                        const qty = quantity;
+                        if (!discounted || discounted === price) {
+                          return <>Rs. {(price * qty).toFixed(2)}</>;
+                        }
+                        const discountFraction = (price - discounted) / price;
+                        if (discountFraction > 0.5) {
+                          return <>Rs. {(price * qty).toFixed(2)}</>;
+                        }
+                        return <>
+                          <span style={{textDecoration: 'line-through', color: '#888', marginRight: 6}}>Rs. {(price * qty).toFixed(2)}</span>
+                          <span>Rs. {(discounted * qty).toFixed(2)}</span>
+                        </>;
+                      })()}
+                    </span>
+                    <motion.button
+                      className="cs-remove"
+                      onClick={() =>
+                        removeFromCart(product._id, variant.weight)
+                      }
+                      aria-label="Remove item"
+                      whileTap={{ scale: 0.9 }}
+                    >
+                      <FiTrash2 size={18} />
+                    </motion.button>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <footer className="cs-footer">
+              <div className="cs-subtotal">
+                <strong>Subtotal</strong>
+                <span>Rs. {subtotal}</span>
+              </div>
+              <motion.button
+                className="cs-checkout"
+                disabled={cart.length === 0}
+                onClick={handleCheckout}
+                whileTap={{ scale: 0.96 }}
+                whileHover={{ scale: 1.04 }}
+              >
+                Checkout
+              </motion.button>
+            </footer>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>,
     document.body
   );
 }

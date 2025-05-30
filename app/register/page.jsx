@@ -4,6 +4,7 @@ import { useRouter }    from 'next/navigation';
 import Link             from 'next/link';
 import api              from '../lib/api';
 import '../../styles/pages/Auth.css';
+import ImageWithFallback from '../components/ImageWithFallback';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -47,7 +48,7 @@ export default function RegisterPage() {
   return (
     <div className="auth-page">
       <form className="auth-form" onSubmit={handleSubmit}>
-        <img src="/assets/logo.png" alt="Thanmai Home Foods" className="auth-logo" />
+        <ImageWithFallback src="/assets/logo.png" alt="Thanmai Home Foods" className="auth-logo" nextImage={false} />
         <h1>Create Account</h1>
 
         <label>

@@ -6,25 +6,44 @@ import api         from '../../lib/api'
 
 // 1️⃣ Pre-generate one page per product slug
 function normalizeSlug(slug) {
-  return slug
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
+  // Use backend slug as-is, just trim whitespace
+  return (slug || '').trim();
 }
 
 export async function generateStaticParams() {
   const prods = await api.get('/products').then(r => r.data)
-  return prods.map(p => ({ slug: normalizeSlug(p.slug) }))
+  const normalize = s =>
+    decodeURIComponent(s || '')
+      .replace(/[^a-zA-Z0-9]+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .toLowerCase();
+  return prods.map(p => ({ slug: normalize(p.slug) }))
 }
 
 export async function getProduct(slug) {
-  const normalize = s => s.toLowerCase().replace(/[-_\s]+/g, '');
-  const prods = await api.get('/products').then(r => r.data)
-  return prods.find(p => normalize(p.slug) === normalize(slug)) || null;
+  // Normalize: decode, replace all non-alphanumerics with spaces, collapse spaces, trim, lowercase
+  const normalize = s =>
+    decodeURIComponent(s || '')
+      .replace(/[^a-zA-Z0-9]+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .toLowerCase();
+
+  const prods = await api.get('/products').then(r => r.data);
+  const inputSlug = normalize(slug);
+  return prods.find(p => normalize(p.slug) === inputSlug) || null;
 }
 
 // 2️⃣ Render client component, passing product as prop
 export default async function PageWrapper({ params }) {
   const product = await getProduct(params.slug);
-  return <ProductPage product={product} />;
+  // Add fallback for missing/invalid product fields
+  if (!product || !product.variants || product.variants.length === 0) {
+    return <div style={{padding:'2rem',textAlign:'center'}}>Product not found or missing data.</div>;
+  }
+  // Only render the client component, do not use motion here
+  return (
+    <ProductPage product={product} />
+  );
 }

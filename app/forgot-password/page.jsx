@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Link             from 'next/link';
 import api              from '../lib/api';
 import '../../styles/pages/Auth.css';
+import ImageWithFallback from '../components/ImageWithFallback';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
@@ -24,9 +25,9 @@ export default function ForgotPasswordPage() {
   return (
     <div className="auth-page">
       <form className="auth-form" onSubmit={handleSubmit}>
-        <img src="/assets/logo.png" alt="Thanmai Home Foods" className="auth-logo" />
+        <ImageWithFallback src="/assets/logo.png" alt="Thanmai Home Foods" className="auth-logo" nextImage={false} />
         <h1>Forgot Password</h1>
-        <p>Enter your email and we’ll send you a reset link.</p>
+        <p>Enter your email and we'll send you a reset link.</p>
 
         <label>
           Email

@@ -30,6 +30,10 @@
   max-width: 900px;
 }
 .youtube-gallery-card {
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  margin: 0;
   background: #fff;
   border: 1px solid #eee;
   border-radius: 12px;
@@ -95,7 +99,9 @@
     gap: 1.2rem;
   }
   .youtube-gallery-card {
-    min-height: 220px;
+    width: 100%;
+    min-width: 0;
+    max-width: none;
   }
   .youtube-gallery-title {
     font-size: 1rem;

@@ -8,6 +8,8 @@ import {
   FaTruck
 } from 'react-icons/fa';
 import '../../styles/components/WhyUs.css';
+import { motion } from 'framer-motion';
+import { fade, slideUp } from '../lib/animationVariants';
 
 export default function WhyUs() {
   const items = [
@@ -34,17 +36,29 @@ export default function WhyUs() {
   ];
 
   return (
-    <section className="why-us-section" aria-label="Why Choose Us" role="region">
+    <motion.section className="why-us-section" variants={fade} initial="hidden" animate="visible">
       <h2 className="wu-title">Why Thanmai Home Foods</h2>
       <div className="why-us" role="list">
         {items.map(({ Icon, title, text }, i) => (
-          <div key={i} className="wu-item" role="listitem" aria-label={title}>
+          <motion.div
+            key={i}
+            className="wu-item"
+            role="listitem"
+            aria-label={title}
+            variants={slideUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ delay: i * 0.07 }}
+            whileHover={{ scale: 1.06, boxShadow: '0 8px 32px rgba(160,29,70,0.13)' }}
+            whileTap={{ scale: 0.97 }}
+          >
             <Icon className="wu-icon" aria-hidden="true" />
             <h3 className="wu-item-title">{title}</h3>
             <p className="wu-item-text">{text}</p>
-          </div>
+          </motion.div>
         ))}
       </div>
-    </section>
+    </motion.section>
   );
 }

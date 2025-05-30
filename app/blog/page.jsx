@@ -4,8 +4,9 @@ import Link from 'next/link';
 import '../../styles/pages/BlogList.css';
 import blogPosts from '../lib/blogMockData';
 import api from '../lib/api';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+import ImageWithFallback from '../components/ImageWithFallback';
+import { motion } from 'framer-motion';
+import { fade } from '../lib/animationVariants';
 
 export default function BlogListPage() {
   // Always use mock data
@@ -20,8 +21,7 @@ export default function BlogListPage() {
   }
 
   return (
-    <>
-      <Navbar />
+    <motion.div variants={fade} initial="hidden" animate="visible">
       <main className="blog-list-page">
         <h1>Blog</h1>
         {posts.length === 0 ? (
@@ -36,7 +36,7 @@ export default function BlogListPage() {
                   style={{ display: 'block', textDecoration: 'none', color: 'inherit' }}
                 >
                   <div className="blog-list-cover">
-                    <img src={post.coverImage} alt={post.title} />
+                    <ImageWithFallback src={post.coverImage} alt={post.title} nextImage={false} />
                   </div>
                   <h2 className="blog-title">{post.title}</h2>
                   <p className="blog-excerpt">{getExcerpt(post.content)}</p>
@@ -46,7 +46,6 @@ export default function BlogListPage() {
           </ul>
         )}
       </main>
-      <Footer />
-    </>
+    </motion.div>
   );
 }

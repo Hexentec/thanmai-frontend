@@ -3,6 +3,8 @@ import Link from 'next/link';
 import blogPosts from '../lib/blogMockData';
 import '../../styles/pages/BlogList.css';
 import ImageWithFallback from './ImageWithFallback';
+import { motion } from 'framer-motion';
+import { slideUp } from '../lib/animationVariants';
 
 export default function BlogPreview() {
   // Show the latest 3 posts
@@ -21,7 +23,17 @@ export default function BlogPreview() {
       <h2 style={{ textAlign: 'center', color: '#A01d46', marginBottom: '1.5rem' }}>From Our Blog</h2>
       <ul className="blog-list blog-list-grid">
         {posts.map(post => (
-          <li key={post._id} className="blog-list-item blog-card">
+          <motion.div
+            key={post._id}
+            className="blog-list-item blog-card"
+            variants={slideUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ type: 'spring', stiffness: 120 }}
+          >
             <Link
               href={`/blog/${post.slug}`}
               aria-label={`Read blog post: ${post.title}`}
@@ -33,7 +45,7 @@ export default function BlogPreview() {
               <h3 className="blog-title">{post.title}</h3>
               <p className="blog-excerpt">{getExcerpt(post.content)}</p>
             </Link>
-          </li>
+          </motion.div>
         ))}
       </ul>
       <div style={{ textAlign: 'center', marginTop: '1.5rem' }}>

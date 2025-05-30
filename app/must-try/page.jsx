@@ -8,6 +8,7 @@ import Image  from 'next/image';
 import ImageWithFallback from '../components/ImageWithFallback';
 import api    from '../lib/api';
 import '../../styles/pages/MustTry.css';
+import ProductCard from '../components/ProductCard';
 
 export default function MustTryPage() {
   const [items, setItems] = useState([]);
@@ -108,48 +109,9 @@ export default function MustTryPage() {
               gridTemplateColumns: `repeat(auto-fill, minmax(${100 / viewMode}%, 1fr))`
             }}
           >
-            {filtered.map(prod => {
-              const v = prod.variants[0] || {};
-              const price = (v.discountedPrice ?? v.price ?? 0).toFixed(2);
-
-              return (
-                <div key={prod._id} className="product-card">
-                  <Link href={`/product/${prod.slug}`} className="pc-image">
-                   
-                      <ImageWithFallback
-                        src={prod.images[0] || '/assets/placeholder.png'}
-                        alt={prod.name}
-                        fill
-                        style={{ objectFit: 'cover' }}
-                        nextImage={true}
-                      />
-                   
-                  </Link>
-                  <div className="pc-body">
-                    <p className="pc-category">Must Try</p>
-                    <Link href={`/product/${prod.slug}`} className="pc-name">
-                      {prod.name}
-                    </Link>
-                    <div className="pc-controls">
-                      <select className="pc-variant">
-                        {prod.variants.map(v => (
-                          <option key={v.weight}>{v.weight}</option>
-                        ))}
-                      </select>
-                      <div className="pc-qty">
-                        <button disabled>–</button>
-                        <span>1</span>
-                        <button disabled>+</button>
-                      </div>
-                    </div>
-                    <div className="pc-footer">
-                      <span className="pc-price">₹{price}</span>
-                      <button className="pc-add">ADD</button>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+            {filtered.map((prod, i) => (
+              <ProductCard key={prod._id} product={prod} categoryName="Must Try" index={i} />
+            ))}
           </div>
         </section>
       </div>

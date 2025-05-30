@@ -11,11 +11,12 @@ import TestimonialsSlider from './components/TestimonialsSlider';
 import BulkRequestForm from './components/BulkRequestForm';
 import Footer from './components/Footer';
 import '../styles/pages/Home.css';
+import { motion } from 'framer-motion';
+import { fade } from './lib/animationVariants';
 
 export default function HomePage() {
   return (
-    <>
-      
+    <motion.div variants={fade} initial="hidden" animate="visible">
       <main className="home-page">
         <HeroSlider />
         <CategoriesGrid />
@@ -26,7 +27,6 @@ export default function HomePage() {
         <TestimonialsSlider />
         <BulkRequestForm />
       </main>
-      
-    </>
+    </motion.div>
   );
 }

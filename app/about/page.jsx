@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { fade } from '../lib/animationVariants';
 
 import WhyUs       from '../components/WhyUs';
 import Image       from 'next/image';
@@ -18,9 +20,7 @@ export default function AboutPage() {
   }, []);
 
   return (
-    <>
-      
-
+    <motion.div variants={fade} initial="hidden" animate="visible">
       <main className="about-page" aria-label="About Thanmai Home Foods" role="main">
         {/* About Us */}
         <section className="about-section" aria-label="About Us" role="region">
@@ -82,8 +82,6 @@ export default function AboutPage() {
           </div>
         </section>
       </main>
-
-     
-    </>
+    </motion.div>
   );
 }
