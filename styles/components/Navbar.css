@@ -388,3 +388,34 @@
     padding-right: 0.5rem;
   }
 }
+
+/* === Mobile Categories List === */
+.mobile-categories {
+  margin: 0.5em 0 0.5em 0;
+  padding: 0.5em 0;
+  border-top: 1px solid #eab1c1;
+  border-bottom: 1px solid #eab1c1;
+}
+.mobile-category-list {
+  margin-top: 0.2em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1em;
+}
+.mobile-category-list a {
+  color: #A01d46;
+  font-weight: 600;
+  font-size: 1em;
+  padding: 0.45em 1.1em;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background 0.18s, color 0.18s;
+  text-align: center;
+  justify-content: center;
+  display: flex;
+}
+.mobile-category-list a:hover,
+.mobile-category-list a:focus {
+  background: #ffe6ec;
+  color: #a01d46;
+}

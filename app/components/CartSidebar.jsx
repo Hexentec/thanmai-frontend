@@ -21,7 +21,22 @@ export default function CartSidebar() {
   } = useCart();
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Lock body scroll when sidebar is open
+  useEffect(() => {
+    if (!mounted) return;
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen, mounted]);
 
   // Calculate subtotal
   const subtotal = cart
@@ -59,6 +74,9 @@ export default function CartSidebar() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
+          onClick={closeCart}
+          aria-modal="true"
+          role="dialog"
         >
           <motion.div
             className="cs-drawer"
@@ -66,10 +84,11 @@ export default function CartSidebar() {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ duration: 0.3, ease: 'easeInOut' }}
+            onClick={e => e.stopPropagation()}
           >
             <header className="cs-header">
               <h2>Shopping cart</h2>
-              <motion.button className="cs-close" onClick={closeCart} whileTap={{ scale: 0.9 }}>×</motion.button>
+              <motion.button className="cs-close" onClick={closeCart} whileTap={{ scale: 0.9 }} aria-label="Close cart sidebar">×</motion.button>
             </header>
             <div className="cs-items">
               {cart.length === 0 && (

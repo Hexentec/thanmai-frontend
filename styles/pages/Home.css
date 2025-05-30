@@ -65,6 +65,15 @@
   object-fit: cover;
   border-radius: 0 0 8px 8px;
 }
+/* Subtle gradient overlay for YouTube thumbs */
+.youtube-gallery-thumb-overlay {
+  position: absolute;
+  left: 0; right: 0; bottom: 0; top: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.18) 60%, rgba(0,0,0,0.01) 100%);
+  z-index: 1;
+  border-radius: 0 0 8px 8px;
+  pointer-events: none;
+}
 .youtube-gallery-play {
   position: absolute;
   left: 50%;

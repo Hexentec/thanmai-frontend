@@ -317,45 +317,168 @@ export default function Navbar() {
             </motion.button>
           </div>
         </div>
-        <form className="mobile-search" role="search" aria-label="Search Pickles" onSubmit={e => e.preventDefault()}>
-          <input type="text" placeholder="Search pickles." aria-label="Search pickles" />
+        <form className="mobile-search" role="search" aria-label="Search Pickles" onSubmit={e => e.preventDefault()} style={{ position: 'relative' }}>
+          <input
+            type="text"
+            placeholder="Search pickles."
+            aria-label="Search pickles"
+            value={search}
+            onChange={e => { setSearch(e.target.value); setSearchOpen(true); }}
+            onFocus={() => setSearchOpen(true)}
+            style={{ width: '100%' }}
+          />
           <button type="submit" aria-label="Search"><FiSearch size={20} /></button>
-        </form>
-      </motion.nav>
-
-      {/* Bottom nav (shared) */}
-      <motion.nav className={`navbar-bottom${mobileMenuOpen ? ' mobile-open' : ''}`} id="mobile-menu" aria-label="Category Navigation" variants={fade} initial="hidden" animate="visible">
-        <Link href="/">Home</Link>
-        <Link href="/about">About</Link>
-        <Link href="/blog">Blog</Link>
-        <div
-          className="dropdown"
-          ref={dropdownRef}
-          tabIndex={0}
-          onClick={handleDropdownClick}
-          onMouseEnter={handleDropdownMouseEnter}
-          onMouseLeave={handleDropdownMouseLeave}
-        >
-          <span tabIndex={0} aria-haspopup="true" aria-expanded={dropdownOpen || undefined}>Shop by Category</span>
           <AnimatePresence>
-            {dropdownOpen && (
+            {searchOpen && search && searchResults.length > 0 && (
               <motion.div
-                className="dropdown-menu"
-                variants={scaleIn}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                transition={{ duration: 0.25, ease: 'easeOut' }}
+                className="search-dropdown"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ duration: 0.18 }}
+                style={{
+                  position: 'absolute',
+                  top: '110%',
+                  left: 0,
+                  right: 0,
+                  background: '#fff',
+                  borderRadius: 8,
+                  boxShadow: '0 4px 24px rgba(0,0,0,0.10)',
+                  zIndex: 100,
+                  padding: '0.5rem 0',
+                  minWidth: 260,
+                  maxHeight: 320,
+                  overflowY: 'auto',
+                }}
               >
-                {categories.map(cat => (
-                  <Link key={cat._id} href={`/shop/${cat.slug}`}>
-                    {cat.name}
-                  </Link>
+                {searchResults.map(group => (
+                  <div key={group.type} style={{ padding: '0.25rem 1rem' }}>
+                    <div style={{ fontWeight: 600, fontSize: 13, color: '#8e1a3d', margin: '0.5rem 0 0.25rem' }}>{group.type}</div>
+                    {group.items.map(item => (
+                      <Link
+                        key={item._id || item.slug}
+                        href={
+                          group.type === 'Products' ? `/product/${item.slug}` :
+                          group.type === 'Categories' ? `/shop` :
+                          group.type === 'Blog Posts' ? `/blog/${item.slug}` : '#'
+                        }
+                        onClick={() => { setSearch(''); setSearchOpen(false); }}
+                        style={{
+                          display: 'flex', alignItems: 'center', gap: 10, padding: '0.35rem 0', color: '#222', textDecoration: 'none', borderRadius: 4, transition: 'background 0.15s',
+                        }}
+                        className="search-result-link"
+                      >
+                        {group.type === 'Products' && (
+                          <img src={item.images?.[0] || '/assets/placeholder.png'} alt={item.name} width={32} height={32} style={{ borderRadius: 4, objectFit: 'cover' }} />
+                        )}
+                        {group.type === 'Categories' && (
+                          <span style={{ fontWeight: 700, fontSize: 18, color: '#8e1a3d' }}>#</span>
+                        )}
+                        {group.type === 'Blog Posts' && (
+                          <img src={item.coverImage} alt={item.title} width={32} height={32} style={{ borderRadius: 4, objectFit: 'cover' }} />
+                        )}
+                        <span style={{ fontSize: 15, fontWeight: 500 }}>
+                          {group.type === 'Products' ? item.name : group.type === 'Categories' ? item.name : item.title}
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
                 ))}
               </motion.div>
             )}
           </AnimatePresence>
-        </div>
+        </form>
+      </motion.nav>
+
+      {/* Bottom nav (shared) */}
+      <motion.nav 
+        className={`navbar-bottom${mobileMenuOpen ? ' mobile-open' : ''}`}
+        id="mobile-menu"
+        aria-label="Category Navigation"
+        variants={fade}
+        initial="hidden"
+        animate={mobileMenuOpen ? 'visible' : 'hidden'}
+        style={{
+          zIndex: 1200, // ensure above hero and other content
+          position: isMobile ? 'fixed' : 'static',
+          left: 0,
+          right: 0,
+          top: isMobile ? 0 : undefined,
+          width: '100vw',
+          display: mobileMenuOpen && isMobile ? 'flex' : undefined,
+          flexDirection: isMobile ? 'column' : undefined,
+          boxShadow: isMobile ? '0 8px 32px rgba(160,29,70,0.13)' : undefined,
+          background: isMobile ? '#ffd6db' : undefined,
+          minHeight: isMobile ? '100vh' : undefined,
+          height: isMobile ? '100vh' : undefined
+        }}
+      >
+        {/* Mobile close button */}
+        {isMobile && mobileMenuOpen && (
+          <button
+            style={{
+              position: 'absolute',
+              top: 16,
+              right: 16,
+              background: 'none',
+              border: 'none',
+              fontSize: 32,
+              color: '#A01d46',
+              zIndex: 1300,
+              cursor: 'pointer',
+              fontWeight: 700
+            }}
+            aria-label="Close menu"
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            ×
+          </button>
+        )}
+        <Link href="/">Home</Link>
+        <Link href="/about">About</Link>
+        <Link href="/blog">Blog</Link>
+        {/* Mobile: show categories as expanded list, Desktop: keep dropdown */}
+        {isMobile && mobileMenuOpen ? (
+          <div className="mobile-categories">
+            <span style={{ fontWeight: 700, color: '#A01d46', marginLeft: 8 }}>Shop by Category</span>
+            <div className="mobile-category-list">
+              {categories.map(cat => (
+                <Link key={cat._id} href={`/shop/${cat.slug}`} style={{ display: 'block', padding: '0.5em 1.2em', color: '#A01d46', fontWeight: 600, borderRadius: 6, fontSize: '1em' }}>
+                  {cat.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div
+            className="dropdown"
+            ref={dropdownRef}
+            tabIndex={0}
+            onClick={handleDropdownClick}
+            onMouseEnter={handleDropdownMouseEnter}
+            onMouseLeave={handleDropdownMouseLeave}
+          >
+            <span tabIndex={0} aria-haspopup="true" aria-expanded={dropdownOpen || undefined}>Shop by Category</span>
+            <AnimatePresence>
+              {dropdownOpen && (
+                <motion.div
+                  className="dropdown-menu"
+                  variants={scaleIn}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  transition={{ duration: 0.25, ease: 'easeOut' }}
+                >
+                  {categories.map(cat => (
+                    <Link key={cat._id} href={`/shop/${cat.slug}`}>
+                      {cat.name}
+                    </Link>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        )}
         <Link href="/bulk-orders">Bulk Orders</Link>
         <Link href="/contact">Contact</Link>
       </motion.nav>

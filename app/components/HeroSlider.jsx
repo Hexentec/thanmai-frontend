@@ -11,11 +11,19 @@ import { fade } from '../lib/animationVariants';
 
 export default function HeroSlider() {
   const [slides, setSlides] = useState([]);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     api.get('/slider')
        .then(res => setSlides(Array.isArray(res.data) ? res.data : []))
        .catch(() => setSlides([]));
+  }, []);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   const dummy = '/assets/dummy1.png';
@@ -41,17 +49,30 @@ export default function HeroSlider() {
           whileHover={{ scale: 1.03, boxShadow: '0 8px 32px rgba(160,29,70,0.18)' }}
           whileTap={{ scale: 0.97 }}
         >
+          {/* Stretched blurred background image */}
+          <ImageWithFallback
+            src={src}
+            alt="Background blur"
+            fill
+            className="slide-bg-blur"
+            sizes="100vw"
+            nextImage={true}
+            style={{ objectFit: 'cover', filter: 'blur(32px) brightness(1.12)', zIndex: 0 }}
+            aria-hidden="true"
+            draggable={false}
+          />
+          {/* Main hero image */}
           <ImageWithFallback
             src={src}
             alt="Delicious homemade pickles"
             fill
-            className="slide-image"
+            className={`slide-image${isMobile ? ' mobile' : ' desktop'}`}
             sizes="100vw"
             priority
             nextImage={true}
+            style={{ objectFit: isMobile ? 'cover' : 'contain', width: '100%', height: '100%', zIndex: 1 }}
           />
-          {/* Optionally add overlay for future text/buttons */}
-          {/* <div className="slide-overlay">Your text or CTA here</div> */}
+          <div className="slide-overlay" aria-hidden="true"></div>
         </motion.div>
       ))}
     </motion.section>

@@ -128,6 +128,7 @@ export default function YouTubeGallery() {
                 loading="lazy"
                 nextImage={false}
               />
+              <div className="youtube-gallery-thumb-overlay" aria-hidden="true"></div>
               <span className="youtube-gallery-play">▶</span>
               {video.duration && (
                 <span style={{ position: 'absolute', right: 8, bottom: 8, background: 'rgba(0,0,0,0.7)', color: '#fff', borderRadius: 4, fontSize: '0.95rem', padding: '2px 6px' }}>{video.duration}</span>
