@@ -98,6 +98,11 @@
   margin-right: 0.25rem;
 }
 
+.navbar-bottom a{
+  color:#000000;
+}
+
+
 /* Hide desktop middle nav on small screens */
 @media (max-width: 768px) {
   .navbar-middle.navbar-desktop {
