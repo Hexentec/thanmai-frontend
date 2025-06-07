@@ -58,17 +58,17 @@ export default function Footer() {
           <h4>Support</h4>
           <ul className="footer-contact">
             <li>
-              <FiPhone /> <a href="tel:+911234567890">+91 12345 67890</a>
+              <FiPhone /> <a href="tel:+917989687713">+91-7989687713</a>
             </li>
             <li>
               <FiMail /> <a href="mailto:support@thanmaihomefoods.com">support@thanmaihomefoods.com</a>
             </li>
           </ul>
-          <div className="footer-social">
+          {/* <div className="footer-social">
             <a href="#" aria-label="Facebook"><FiFacebook size={20} /></a>
             <a href="#" aria-label="Instagram"><FiInstagram size={20} /></a>
             <a href="#" aria-label="Twitter"><FiTwitter size={20} /></a>
-          </div>
+          </div> */}
         </div>
 
       </div>
