@@ -90,11 +90,12 @@ export default function ContactPage() {
             <div className="info-list">
               <div className="info-item">
                 <FiMapPin className="info-icon" aria-hidden="true" />
-                <span>123 Main Street, City, State, 123456</span>
+                <span>Thanmai Home Foods
+Door No: 1-16 Sangayagudem Post, DEVARAPALLE Mandal, East Godavari District, Andhra Pradesh, Pincode - 534313</span>
               </div>
               <div className="info-item">
                 <FiPhone className="info-icon" aria-hidden="true" />
-                <a href="tel:+911234567890" aria-label="Call support">+91 12345 67890</a>
+                <a href="tel:+917989687713" aria-label="Call support">+91-7989687713</a>
               </div>
               <div className="info-item">
                 <FiMail className="info-icon" aria-hidden="true" />
