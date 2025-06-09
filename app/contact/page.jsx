@@ -105,7 +105,7 @@ Door No: 1-16 Sangayagudem Post, DEVARAPALLE Mandal, East Godavari District, And
               </div>
             </div>
 
-            <h2>Follow Us</h2>
+            {/*  <h2>Follow Us</h2>
             <div className="social-list">
               <a href="#" aria-label="Facebook">
                 <FiFacebook aria-hidden="true" />
@@ -116,7 +116,7 @@ Door No: 1-16 Sangayagudem Post, DEVARAPALLE Mandal, East Godavari District, And
               <a href="#" aria-label="Twitter">
                 <FiTwitter aria-hidden="true" />
               </a>
-            </div>
+            </div> */}
 
             <h2>Our Location</h2>
             <div className="map-wrapper">
