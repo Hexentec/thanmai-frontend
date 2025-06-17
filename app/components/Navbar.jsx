@@ -121,7 +121,7 @@ const DesktopNavLinks = ({ isLoggedIn, loginHref, totalQuantity, openCart, handl
 );
 
 // Desktop Bottom Navbar
-const DesktopBottomNav = () => (
+const DesktopBottomNav = ({ categories }) => (
   <nav className="navbar-bottom">
     <Link href="/">Home</Link>
     <Link href="/about">About</Link>
@@ -129,10 +129,19 @@ const DesktopBottomNav = () => (
     <Link href="/bulk-orders">Bulk Orders</Link>
     <Link href="/contact">Contact</Link>
     <Link href="/blog">Blog</Link>
-    <Link href="/terms">Terms &amp; Conditions</Link>
-    <Link href="/privacy">Privacy Policy</Link>
-    <Link href="/refund">Refund Policy</Link>
-    <Link href="/shipping">Shipping Policy</Link>
+    <div className="dropdown">
+      <span>Categories</span>
+      <div className="dropdown-menu">
+        {categories.map(category => (
+          <Link 
+            key={category._id} 
+            href={`/shop?category=${category.slug}`}
+          >
+            {category.name}
+          </Link>
+        ))}
+      </div>
+    </div>
   </nav>
 );
 
@@ -171,10 +180,6 @@ const MobileNav = ({ mobileMenuOpen, toggleMobileMenu, categories, dropdownOpen,
         <Link href="/bulk-orders" className="mobile-category-link" onClick={toggleMobileMenu}>Bulk Orders</Link>
         <Link href="/contact" className="mobile-category-link" onClick={toggleMobileMenu}>Contact</Link>
         <Link href="/blog" className="mobile-category-link" onClick={toggleMobileMenu}>Blog</Link>
-        <Link href="/terms" className="mobile-category-link" onClick={toggleMobileMenu}>Terms &amp; Conditions</Link>
-        <Link href="/privacy" className="mobile-category-link" onClick={toggleMobileMenu}>Privacy Policy</Link>
-        <Link href="/refund" className="mobile-category-link" onClick={toggleMobileMenu}>Refund Policy</Link>
-        <Link href="/shipping" className="mobile-category-link" onClick={toggleMobileMenu}>Shipping Policy</Link>
       </div>
       {/* Categories below main links */}
       <div className="mobile-categories">
@@ -362,8 +367,9 @@ export default function Navbar() {
           handleLogout={handleLogout}
         />
       </motion.nav>
-      {/* Desktop Bottom Navbar */}
-      <DesktopBottomNav />
+
+      {/* Desktop Bottom Nav */}
+      <DesktopBottomNav categories={categories} />
 
       {/* Mobile Navigation */}
       <MobileNav
