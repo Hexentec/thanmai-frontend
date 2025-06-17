@@ -7,7 +7,7 @@ import CartSidebar from './components/CartSidebar';
 
 export const metadata = {
   title: 'Thanmai Home Foods',
-  description: 'Online Pickle Shop',
+  description: 'Online Pickle store',
 };
 
 export default function RootLayout({ children }) {
