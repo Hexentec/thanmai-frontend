@@ -52,8 +52,8 @@ export default function ImageWithFallback({ src, alt, width, height, fill, style
   if (fill) {
     imageProps.fill = true;
   } else {
-    imageProps.width = width;
-    imageProps.height = height;
+    imageProps.width = width || 500;
+    imageProps.height = height || 300;
   }
   
   return <NextImage {...imageProps} />;
