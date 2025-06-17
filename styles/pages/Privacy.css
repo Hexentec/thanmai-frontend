@@ -1,0 +1,54 @@
+.privacy-page {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #333;
+  line-height: 1.6;
+}
+
+.privacy-page h1 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #A01d46;
+}
+
+.privacy-page section {
+  margin-bottom: 1.5rem;
+}
+
+.privacy-page h2 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: #222;
+}
+
+.privacy-page ul {
+  padding-left: 1.25rem;
+  margin: 0.5rem 0;
+}
+
+.privacy-page li {
+  margin-bottom: 0.5rem;
+}
+
+.privacy-page p {
+  margin: 0.5rem 0;
+}
+
+.privacy-page a {
+  color: #A01d46;
+  text-decoration: none;
+}
+.privacy-page a:hover {
+  text-decoration: underline;
+}
+
+.privacy-back {
+  margin-top: 2rem;
+  text-align: center;
+}
+.privacy-back a {
+  font-weight: bold;
+}

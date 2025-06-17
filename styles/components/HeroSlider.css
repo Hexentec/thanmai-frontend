@@ -1,0 +1,101 @@
+/* styles/components/HeroSlider.css */
+
+/* Make the slider full-width, even inside a centered container */
+.hero-slider {
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  width: 100vw;
+
+  display: flex;           /* line up slides side by side */
+  overflow: hidden;        /* hide the off-screen slides */
+  box-shadow: 0 4px 24px rgba(160,29,70,0.10);
+  border-radius: 0 0 32px 32px;
+  min-height: 320px;
+  z-index: 1;
+}
+
+/* Each slide takes up the full viewport width */
+.slide {
+  position: relative;
+  min-width: 100vw;        /* flex: 0 0 100vw */
+  height: 50vh;            /* adjust height as needed */
+  flex-shrink: 0;
+  border-radius: 0 0 32px 32px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(160,29,70,0.08);
+  z-index: 1;
+}
+
+/* Next.js Image in fill mode */
+.slide-image {
+  object-position: center;
+  object-fit: cover;
+  border-radius: 0 0 32px 32px;
+  z-index: 1;
+}
+
+.slide-image.desktop {
+  object-fit: contain !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+.slide-image.mobile {
+  object-fit: cover !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Auto-slide animation between 2 slides */
+@keyframes slideAnim {
+  0%, 45%   { transform: translateX(0); }
+  50%, 95%  { transform: translateX(-100vw); }
+  100%      { transform: translateX(0); }
+}
+
+.hero-slider {
+  animation: slideAnim 12s ease-in-out infinite;
+}
+
+/* Overlay for future text/buttons */
+.slide-overlay {
+  position: absolute;
+  left: 0; right: 0; bottom: 0; top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: linear-gradient(to top, rgba(0,0,0,0.18) 60%, rgba(0,0,0,0.01) 100%);
+  font-size: 2rem;
+  font-weight: bold;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.slide-bg-blur {
+  position: absolute !important;
+  left: 0; right: 0; top: 0; bottom: 0;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  filter: blur(32px) brightness(1.12);
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+@media (max-width: 768px) {
+  .hero-slider {
+    min-height: 180px;
+    border-radius: 0 0 18px 18px;
+  }
+  .slide {
+    height: 32vh;
+    border-radius: 0 0 18px 18px;
+  }
+  .slide-image {
+    border-radius: 0 0 18px 18px;
+  }
+}

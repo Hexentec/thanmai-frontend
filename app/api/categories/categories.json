@@ -1,0 +1,6 @@
+[
+  { "_id": "veg",    "slug": "veg-pickles",     "name": "Veg Pickles",     "image": "/assets/dummy-veg.png" },
+  { "_id": "nonveg", "slug": "non-veg-pickles", "name": "Non-Veg Pickles", "image": "/assets/dummy-nonveg.png" },
+  { "_id": "achar",  "slug": "achar",           "name": "Achar",          "image": "/assets/dummy1.png" },
+  { "_id": "spicy",  "slug": "spicy-pickles",   "name": "Spicy Pickles",  "image": "/assets/dummy2.png" }
+] 

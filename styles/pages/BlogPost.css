@@ -1,0 +1,35 @@
+/* styles/pages/BlogPost.css */
+.blog-post-page {
+    padding: 2rem 4rem;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .blog-post-page h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .blog-post-page img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+  }
+  
+  .blog-post-page .content {
+    line-height: 1.6;
+  }
+  
+  @media (max-width: 768px) {
+    .blog-post-page {
+      padding: 1rem 2rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .blog-post-page {
+      padding: 0.5rem 1rem;
+    }
+  }
+  

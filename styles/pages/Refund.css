@@ -1,0 +1,61 @@
+.refund-page {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #333;
+  line-height: 1.6;
+}
+
+.refund-page h1 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #A01d46;
+}
+
+.refund-page section {
+  margin-bottom: 1.5rem;
+}
+
+.refund-page h2 {
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: #222;
+}
+
+.refund-page h3 {
+  font-size: 1.125rem;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  color: #444;
+}
+
+.refund-page p {
+  margin: 0.5rem 0;
+}
+
+.refund-page ul {
+  padding-left: 1.25rem;
+  margin: 0.5rem 0 0;
+}
+
+.refund-page li {
+  margin-bottom: 0.5rem;
+}
+
+.refund-page a {
+  color: #A01d46;
+  text-decoration: none;
+}
+.refund-page a:hover {
+  text-decoration: underline;
+}
+
+.refund-back {
+  margin-top: 2rem;
+  text-align: center;
+}
+.refund-back a {
+  font-weight: bold;
+}

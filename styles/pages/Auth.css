@@ -1,0 +1,102 @@
+.auth-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #f5f5f5;
+  padding: 1rem;
+}
+
+.auth-form {
+  width: 100%;
+  max-width: 360px;
+  background: #fff;
+  padding: 2rem 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  text-align: center;
+}
+
+.auth-logo {
+  display: block;
+  margin: 0 auto 1.5rem;
+  max-width: 120px;
+  height: auto;
+}
+
+.auth-form h1 {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.auth-form p {
+  margin-bottom: 1rem;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+.auth-form label {
+  display: block;
+  text-align: left;
+  margin-bottom: 1rem;
+}
+.auth-form label input[type="text"],
+.auth-form label input[type="email"],
+.auth-form label input[type="password"] {
+  width: 100%;
+  padding: 0.65rem 0.8rem;
+  margin-top: 0.3rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+.auth-form label input:focus {
+  outline: none;
+  border-color: #A01d46;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  margin: 1rem 0;
+  text-align: left;
+}
+
+.auth-form button {
+  width: 100%;
+  padding: 0.75rem;
+  background: #A01d46;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.auth-form button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+.auth-form button:hover:not(:disabled) {
+  background: #8e1a3d;
+}
+
+.links {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-size: 0.9rem;
+}
+.links a {
+  color: #A01d46;
+  text-decoration: none;
+}
+.links a:hover {
+  text-decoration: underline;
+}
