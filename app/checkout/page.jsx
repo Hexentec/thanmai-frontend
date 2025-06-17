@@ -1,14 +1,17 @@
 'use client';
 
 import React, { useState } from 'react';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+import { useRouter } from 'next/navigation';
 import { useCart } from '../context/CartContext';
+import api from '../lib/api';
 import '../../styles/pages/Checkout.css';
 import ImageWithFallback from '../components/ImageWithFallback';
+import { motion } from 'framer-motion';
+import { fade } from '../lib/animationVariants';
 
 export default function CheckoutPage() {
-  const { cart } = useCart();
+  const router = useRouter();
+  const { cart, clearCart } = useCart();
   const [form, setForm] = useState({
     email: '',
     firstName: '',
@@ -24,6 +27,7 @@ export default function CheckoutPage() {
   const [country, setCountry] = useState('India');
   const [billingSame, setBillingSame] = useState(true);
   const [coupon, setCoupon] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleChange = e => {
     const { name, value, type, checked } = e.target;
@@ -38,49 +42,94 @@ export default function CheckoutPage() {
     0
   );
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const { data } = await api.post('/orders/create', {
+        items: cart.map(item => ({
+          product: item.product._id,
+          variant: item.variant._id,
+          quantity: item.quantity
+        })),
+        shipping: {
+          firstName: form.firstName,
+          lastName: form.lastName,
+          address: form.address,
+          suite: form.suite,
+          city: form.city,
+          state: form.state,
+          zip: form.zip,
+          phone: form.phone,
+          country: country
+        },
+        email: form.email,
+        payment: {
+          method: 'razorpay'
+        }
+      });
+
+      // Initialize Razorpay
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        amount: data.amount,
+        currency: "INR",
+        name: "Thanmai Home Foods",
+        description: "Order Payment",
+        order_id: data.orderId,
+        handler: async function (response) {
+          try {
+            await api.post('/orders/verify-payment', {
+              orderId: data.orderId,
+              paymentId: response.razorpay_payment_id,
+              signature: response.razorpay_signature
+            });
+            clearCart();
+            router.push(`/track-order?order=${data.orderNumber}`);
+          } catch (err) {
+            console.error('Payment verification failed:', err);
+            alert('Payment verification failed. Please contact support.');
+          }
+        },
+        prefill: {
+          name: `${form.firstName} ${form.lastName}`,
+          email: form.email,
+          contact: form.phone
+        },
+        theme: {
+          color: "#A01d46"
+        }
+      };
+
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
+    } catch (err) {
+      console.error('Order creation failed:', err);
+      alert('Failed to create order. Please try again.');
+    }
+    setLoading(false);
+  };
+
   return (
-    <>
-      
-
+    <motion.div variants={fade} initial="hidden" animate="visible">
       <main className="checkout-page">
-        {/* ─── LEFT COLUMN ───────────────────────────────────────────────────────── */}
         <div className="checkout-left">
-          {/* Contact */}
-          <h2>Contact</h2>
-          <div className="contact-row">
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              value={form.email}
-              onChange={handleChange}
-              required
-            />
-           
-          </div>
-          <label className="checkbox-label">
-            <input
-              type="checkbox"
-              name="saveInfo"
-              checked={form.saveInfo}
-              onChange={handleChange}
-            />
-            Email me with news and offers
-          </label>
+          <h1>Checkout</h1>
 
-          {/* Delivery */}
-          <h2>Delivery</h2>
-          <form className="delivery-form">
+          <form onSubmit={handleSubmit}>
+            <h2>Contact information</h2>
             <label>
-              Country / Region
-              <select value={country} onChange={e => setCountry(e.target.value)}>
-                <option>India</option>
-                <option>USA</option>
-                <option>UK</option>
-                {/* etc */}
-              </select>
+              Email
+              <input
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                required
+              />
             </label>
 
+            <h2>Shipping address</h2>
             <div className="two-cols">
               <label>
                 First name
@@ -104,17 +153,15 @@ export default function CheckoutPage() {
               </label>
             </div>
 
-            <label className="address-search">
+            <label>
               Address
               <input
                 type="text"
                 name="address"
-                placeholder="123 Main St"
                 value={form.address}
                 onChange={handleChange}
                 required
               />
-              <button type="button" className="search-btn">🔍</button>
             </label>
 
             <label>
@@ -146,10 +193,11 @@ export default function CheckoutPage() {
                   onChange={handleChange}
                   required
                 >
-                  <option>Maharashtra</option>
-                  <option>Tamil Nadu</option>
-                  <option>Kerala</option>
-                  {/* etc */}
+                  <option value="">Select State</option>
+                  <option value="Maharashtra">Maharashtra</option>
+                  <option value="Tamil Nadu">Tamil Nadu</option>
+                  <option value="Kerala">Kerala</option>
+                  {/* Add more states as needed */}
                 </select>
               </label>
               <label>
@@ -167,7 +215,7 @@ export default function CheckoutPage() {
             <label>
               Phone
               <input
-                type="text"
+                type="tel"
                 name="phone"
                 value={form.phone}
                 onChange={handleChange}
@@ -184,104 +232,60 @@ export default function CheckoutPage() {
               />
               Save this information for next time
             </label>
-          </form>
 
-          {/* Shipping method */}
-          <h2>Shipping method</h2>
-          <div className="shipping-method">
-            Enter your shipping address to view available shipping methods.
-          </div>
-
-          {/* Payment */}
-          <h2>Payment</h2>
-          <p className="payment-note">All transactions are secure and encrypted.</p>
-          <div className="payment-method">
-            <div>Razorpay Secure (UPI, Cards, Wallets, NetBanking)</div>
-            <div className="payment-logos">
-              {/* You can swap these for real <img> icons */}
-              <span>UPI</span>&nbsp;<span>Visa</span>&nbsp;<span>MC</span>&nbsp;<span>+14</span>
+            <h2>Payment</h2>
+            <p className="payment-note">All transactions are secure and encrypted.</p>
+            <div className="payment-method">
+              <div>Razorpay Secure (UPI, Cards, Wallets, NetBanking)</div>
+              <div className="payment-logos">
+                <span>UPI</span>&nbsp;<span>Visa</span>&nbsp;<span>MC</span>&nbsp;<span>+14</span>
+              </div>
+              <p className="payment-note">
+                After clicking &quot;Pay now&quot;, you will be redirected to Razorpay Secure to complete your purchase.
+              </p>
             </div>
-            <p className="payment-note">
-              After clicking &quot;Pay now&quot;, you will be redirected to Razorpay Secure to complete your purchase.
-            </p>
-          </div>
 
-          {/* Billing address */}
-          <h2>Billing address</h2>
-          <label className="radio-label">
-            <input
-              type="radio"
-              name="billing"
-              checked={billingSame}
-              onChange={() => setBillingSame(true)}
-            />
-            Same as shipping address
-          </label>
-          <label className="radio-label">
-            <input
-              type="radio"
-              name="billing"
-              checked={!billingSame}
-              onChange={() => setBillingSame(false)}
-            />
-            Use a different billing address
-          </label>
+            <button type="submit" className="pay-now-btn" disabled={loading}>
+              {loading ? 'Processing...' : `Pay ₹${subtotal.toFixed(2)}`}
+            </button>
 
-          <button className="pay-now-btn">Pay now</button>
-
-          <div className="policies">
-            <a href="/refund-policy">Refund policy</a>
-            <a href="/privacy-policy">Privacy policy</a>
-            <a href="/cancellation-policy">Cancellation policy</a>
-          </div>
+            <div className="policies">
+              <a href="/refund-policy">Refund policy</a>
+              <a href="/privacy-policy">Privacy policy</a>
+              <a href="/cancellation-policy">Cancellation policy</a>
+            </div>
+          </form>
         </div>
 
-        {/* ─── RIGHT COLUMN ───────────────────────────────────────────────────────── */}
         <div className="checkout-right">
-          <div className="cart-summary">
-            {cart.map(item => (
-              <div key={item.product._id + item.variant.weight} className="cart-item">
-                <ImageWithFallback src={item.product.images[0]} alt={item.product.name} nextImage={false} />
-                <div className="item-details">
-                  <strong>{item.product.name}</strong>
-                  <small>{item.variant.weight}</small>
+          <div className="order-summary">
+            <h2>Order Summary</h2>
+            <div className="cart-items">
+              {cart.map((item, index) => (
+                <div key={index} className="cart-item">
+                  <ImageWithFallback
+                    src={item.product.image}
+                    alt={item.product.name}
+                    width={80}
+                    height={80}
+                  />
+                  <div className="item-details">
+                    <p className="item-name">{item.product.name}</p>
+                    <p className="item-variant">{item.variant.name}</p>
+                    <p className="item-quantity">Quantity: {item.quantity}</p>
+                    <p className="item-price">₹{(item.variant.discountedPrice || item.variant.price) * item.quantity}</p>
+                  </div>
                 </div>
-                <div className="item-qty-badge">{item.quantity}</div>
-                <div className="item-price">
-                  ₹{((item.variant.discountedPrice || item.variant.price) * item.quantity).toFixed(2)}
-                </div>
-              </div>
-            ))}
-
-            {/* Coupon */}
-            <div className="coupon-form">
-              <input
-                type="text"
-                placeholder="Discount code or gift card"
-                value={coupon}
-                onChange={e => setCoupon(e.target.value)}
-              />
-              <button>Apply</button>
+              ))}
             </div>
-
-            {/* Totals */}
-            <div className="summary-line">
-              <span>Subtotal · {cart.reduce((sum, i) => sum + i.quantity, 0)} items</span>
-              <span>₹{subtotal.toFixed(2)}</span>
-            </div>
-            <div className="summary-line">
-              <span>Shipping</span>
-              <span>Enter shipping address</span>
-            </div>
-            <div className="summary-total">
-              <span>Total</span>
-              <span>INR ₹{subtotal.toFixed(2)}</span>
+            <div className="order-total">
+              <p>Subtotal: ₹{subtotal.toFixed(2)}</p>
+              <p>Shipping: Calculated at next step</p>
+              <p className="total">Total: ₹{subtotal.toFixed(2)}</p>
             </div>
           </div>
         </div>
       </main>
-
-      
-    </>
+    </motion.div>
   );
 }

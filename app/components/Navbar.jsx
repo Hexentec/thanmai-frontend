@@ -9,7 +9,8 @@ import {
   FiSearch,
   FiUser,
   FiShoppingCart,
-  FiX
+  FiX,
+  FiPackage
 } from 'react-icons/fi';
 import { useCart } from '../context/CartContext';
 import api from '../lib/api';
@@ -102,15 +103,11 @@ const SearchBar = ({ search, setSearch, searchOpen, setSearchOpen, searchResults
 );
 
 // Desktop Navigation Links
-const DesktopNavLinks = ({ isLoggedIn, loginHref, totalQuantity, openCart, handleLogout }) => (
+const DesktopNavLinks = ({ totalQuantity, openCart }) => (
   <div className="links">
-    {isLoggedIn ? (
-      <button onClick={handleLogout} className="nav-link">Logout</button>
-    ) : (
-      <Link href={loginHref} className="nav-link">
-        <FiUser size={20} /> Login
-      </Link>
-    )}
+    <Link href="/track-order" className="nav-link">
+      <FiPackage size={20} /> Track Order
+    </Link>
     <button onClick={openCart} className="cart-button">
       <FiShoppingCart size={20} />
       {totalQuantity > 0 && (
@@ -127,6 +124,7 @@ const DesktopBottomNav = ({ categories }) => (
     <Link href="/about">About</Link>
     <Link href="/must-try">Must Try</Link>
     <Link href="/bulk-orders">Bulk Orders</Link>
+    <Link href="/track-order">Track Order</Link>
     <Link href="/contact">Contact</Link>
     <Link href="/blog">Blog</Link>
     <div className="dropdown">
@@ -178,6 +176,7 @@ const MobileNav = ({ mobileMenuOpen, toggleMobileMenu, categories, dropdownOpen,
         <Link href="/about" className="mobile-category-link" onClick={toggleMobileMenu}>About</Link>
         <Link href="/must-try" className="mobile-category-link" onClick={toggleMobileMenu}>Must Try</Link>
         <Link href="/bulk-orders" className="mobile-category-link" onClick={toggleMobileMenu}>Bulk Orders</Link>
+        <Link href="/orders" className="mobile-category-link" onClick={toggleMobileMenu}>Orders</Link>
         <Link href="/contact" className="mobile-category-link" onClick={toggleMobileMenu}>Contact</Link>
         <Link href="/blog" className="mobile-category-link" onClick={toggleMobileMenu}>Blog</Link>
       </div>
@@ -208,12 +207,6 @@ export default function Navbar() {
   const { totalQuantity, openCart } = useCart();
   const router = useRouter();
   const pathname = usePathname();
-
-  // Track login state on each route change
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  useEffect(() => {
-    setIsLoggedIn(!!localStorage.getItem('token'));
-  }, [pathname]);
 
   // Load marquee texts
   useEffect(() => {
@@ -247,16 +240,6 @@ export default function Navbar() {
     setMobileMenuOpen(o => !o);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    delete api.defaults.headers.common['Authorization'];
-    setIsLoggedIn(false);
-    router.push('/');
-  };
-
-  // Build login link with redirect back
-  const loginHref = `/login?redirect=${encodeURIComponent(pathname)}`;
-
   // Track screen width for SSR-safe mobile detection
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
@@ -277,59 +260,6 @@ export default function Navbar() {
   useEffect(() => {
     api.get('/products').then(r => setAllProducts(Array.isArray(r.data) ? r.data : []));
   }, []);
-
-  // Search logic with debounce
-  useEffect(() => {
-    if (!search) {
-      setSearchResults([]);
-      return;
-    }
-
-    const timeoutId = setTimeout(() => {
-      const q = search.toLowerCase();
-      // Products
-      const prodResults = allProducts.filter(p => p.name.toLowerCase().includes(q)).slice(0, 5);
-      // Categories
-      const catResults = categories.filter(c => c.name.toLowerCase().includes(q)).slice(0, 5);
-      // Blogs
-      const blogResults = blogPosts.filter(b => b.title.toLowerCase().includes(q) || b.content.toLowerCase().includes(q)).slice(0, 5);
-      
-      setSearchResults([
-        prodResults.length ? { type: 'Products', items: prodResults } : null,
-        catResults.length ? { type: 'Categories', items: catResults } : null,
-        blogResults.length ? { type: 'Blog Posts', items: blogResults } : null,
-      ].filter(Boolean));
-    }, 300); // 300ms debounce
-
-    return () => clearTimeout(timeoutId);
-  }, [search, allProducts, categories]);
-
-  // Close search dropdown on outside click
-  useEffect(() => {
-    function handleClick(e) {
-      if (searchRef.current && !searchRef.current.contains(e.target)) {
-        setSearchOpen(false);
-      }
-    }
-    document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
-  }, []);
-
-  // Close mobile menu when clicking outside
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (mobileMenuOpen && !event.target.closest('.navbar-bottom') && !event.target.closest('.hamburger')) {
-        setMobileMenuOpen(false);
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [mobileMenuOpen]);
-
-  // Close mobile menu on route change
-  useEffect(() => {
-    setMobileMenuOpen(false);
-  }, [pathname]);
 
   return (
     <>
@@ -360,11 +290,8 @@ export default function Navbar() {
         />
         
         <DesktopNavLinks
-          isLoggedIn={isLoggedIn}
-          loginHref={loginHref}
           totalQuantity={totalQuantity}
           openCart={openCart}
-          handleLogout={handleLogout}
         />
       </motion.nav>
 

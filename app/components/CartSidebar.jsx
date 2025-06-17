@@ -56,12 +56,7 @@ export default function CartSidebar() {
 
   const handleCheckout = () => {
     closeCart();
-    const token = localStorage.getItem('token');
-    if (!token) {
-      router.push('/login?redirect=/checkout');
-    } else {
-      router.push('/checkout');
-    }
+    router.push('/checkout');
   };
 
   if (!mounted) return null;
