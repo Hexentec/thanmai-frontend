@@ -1,37 +1,56 @@
 // src/context/CartContext.jsx
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
 const CartContext = createContext();
 export const useCart = () => useContext(CartContext);
 
+const CART_STORAGE_KEY = 'thanmai_cart';
+
 export function CartProvider({ children }) {
-  // initialize from localStorage
   const [cart, setCart] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  const [error, setError] = useState(null);
 
+  // Initialize from localStorage
   useEffect(() => {
     setIsClient(true);
     try {
-      setCart(JSON.parse(localStorage.getItem('cart')) || []);
-    } catch {
+      const savedCart = localStorage.getItem(CART_STORAGE_KEY);
+      if (savedCart) {
+        const parsedCart = JSON.parse(savedCart);
+        if (Array.isArray(parsedCart)) {
+          setCart(parsedCart);
+        } else {
+          console.warn('Invalid cart data in localStorage');
+          setCart([]);
+        }
+      }
+    } catch (err) {
+      console.error('Error loading cart from localStorage:', err);
+      setError('Failed to load cart data');
       setCart([]);
     }
   }, []);
 
-  // persist to localStorage on change
+  // Persist to localStorage on change
   useEffect(() => {
-    if (isClient) {
-      localStorage.setItem('cart', JSON.stringify(cart));
+    if (isClient && !error) {
+      try {
+        localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+      } catch (err) {
+        console.error('Error saving cart to localStorage:', err);
+        setError('Failed to save cart data');
+      }
     }
-  }, [cart, isClient]);
+  }, [cart, isClient, error]);
 
-  const openCart  = () => setIsOpen(true);
-  const closeCart = () => setIsOpen(false);
+  const openCart = useCallback(() => setIsOpen(true), []);
+  const closeCart = useCallback(() => setIsOpen(false), []);
 
-  const addToCart = ({ product, variant, quantity }) => {
+  const addToCart = useCallback(({ product, variant, quantity }) => {
     setCart(prev => {
       const idx = prev.findIndex(
         item =>
@@ -49,9 +68,9 @@ export function CartProvider({ children }) {
       }
     });
     openCart();
-  };
+  }, [openCart]);
 
-  const updateQuantity = (productId, weight, qty) => {
+  const updateQuantity = useCallback((productId, weight, qty) => {
     setCart(prev =>
       prev.map(item =>
         item.product._id === productId && item.variant.weight === weight
@@ -59,9 +78,9 @@ export function CartProvider({ children }) {
           : item
       )
     );
-  };
+  }, []);
 
-  const removeFromCart = (productId, weight) => {
+  const removeFromCart = useCallback((productId, weight) => {
     setCart(prev =>
       prev.filter(
         item =>
@@ -71,22 +90,38 @@ export function CartProvider({ children }) {
           )
       )
     );
-  };
+  }, []);
 
-  // ← derive the total number of units in the cart
+  const clearCart = useCallback(() => {
+    setCart([]);
+    try {
+      localStorage.removeItem(CART_STORAGE_KEY);
+    } catch (err) {
+      console.error('Error clearing cart from localStorage:', err);
+      setError('Failed to clear cart data');
+    }
+  }, []);
+
+  // Calculate totals
   const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const totalAmount = cart.reduce((sum, item) => 
+    sum + (item.product.price * item.quantity), 0
+  );
 
   return (
     <CartContext.Provider
       value={{
         cart,
         isOpen,
+        error,
         openCart,
         closeCart,
         addToCart,
         updateQuantity,
         removeFromCart,
-        totalQuantity  // ← expose it here
+        clearCart,
+        totalQuantity,
+        totalAmount
       }}
     >
       {children}

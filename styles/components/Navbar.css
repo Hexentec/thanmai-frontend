@@ -248,9 +248,9 @@
 /* === Bottom Nav (Shared) === */
 .navbar-bottom {
   background: white;
-  position: fixed;
-  top: 60px;
-  z-index: 99;
+  position: sticky;
+  top: 68px; /* Height of the main navbar */
+  z-index: 1002;
   color: #A01d46;
   display: flex;
   align-items: center;
@@ -269,7 +269,7 @@
 }
 
 .navbar-bottom a {
-  color: #fff;
+  color: #A01d46;
   text-decoration: none;
   padding: 0.5rem 0.75rem;
   border-radius: 6px;
@@ -280,8 +280,8 @@
 }
 
 .navbar-bottom a:hover {
-  color: #A01d46;
-  background: #fff;
+  color: #fff;
+  background: #A01d46;
   border-radius: 6px;
 }
 
@@ -297,12 +297,12 @@
   padding: 0.5rem 0.75rem;
   border-radius: 6px;
   transition: all 0.2s ease;
-  color: #fff;
+  color: #A01d46;
 }
 
 .dropdown span:hover {
-  color: #A01d46;
-  background: #fff;
+  color: #fff;
+  background: #A01d46;
 }
 
 .dropdown .dropdown-menu {
@@ -346,85 +346,6 @@
 @media (max-width: 768px) {
   .navbar-bottom {
     display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: #ffd6db;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 4rem 1rem 1rem;
-    gap: 0.5rem;
-    z-index: 1004;
-    overflow-y: auto;
-  }
-
-  .navbar-bottom.mobile-open {
-    display: flex;
-  }
-
-  .navbar-bottom.mobile-open a {
-    color: #A01d46;
-    font-size: 1.1rem;
-    padding: 0.75rem 1rem;
-    width: 100%;
-  }
-
-  .navbar-bottom.mobile-open a:hover {
-    background: rgba(160,29,70,0.1);
-  }
-
-  .mobile-close-button {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    background: none;
-    border: none;
-    color: #A01d46;
-    z-index: 1300;
-    cursor: pointer;
-    padding: 0.5rem;
-    border-radius: 50%;
-    transition: background 0.2s;
-  }
-
-  .mobile-close-button:hover {
-    background: rgba(160,29,70,0.1);
-  }
-
-  .mobile-categories {
-    width: 100%;
-    margin-top: 1rem;
-    padding: 0 1rem;
-  }
-
-  .mobile-categories-title {
-    font-weight: 700;
-    color: #A01d46;
-    margin-left: 8px;
-    display: block;
-    margin-bottom: 0.5rem;
-  }
-
-  .mobile-category-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .mobile-category-link {
-    display: block;
-    padding: 0.5em 1.2em;
-    color: #A01d46;
-    font-weight: 600;
-    border-radius: 6px;
-    font-size: 1em;
-    transition: background 0.2s;
-  }
-
-  .mobile-category-link:hover {
-    background: rgba(160,29,70,0.1);
   }
 }
 
