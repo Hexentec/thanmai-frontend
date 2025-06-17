@@ -248,7 +248,7 @@
 /* === Bottom Nav (Shared) === */
 .navbar-bottom {
   background: white;
-  position: sticky;
+  position: fixed;
   top: 0;
   z-index: 100;
   color: #A01d46;
