@@ -124,7 +124,6 @@ const DesktopBottomNav = ({ categories }) => (
     <Link href="/about">About</Link>
     <Link href="/must-try">Must Try</Link>
     <Link href="/bulk-orders">Bulk Orders</Link>
-    <Link href="/track-order">Track Order</Link>
     <Link href="/contact">Contact</Link>
     <Link href="/blog">Blog</Link>
     <div className="dropdown">
