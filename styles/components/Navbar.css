@@ -251,6 +251,7 @@
   position: sticky;
   top: 0;
   z-index: 100;
+  color: #A01d46;
   display: flex;
   align-items: center;
   justify-content: center;
