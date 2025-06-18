@@ -602,3 +602,68 @@
     display: none;
   }
 }
+
+/* Mobile Search Styles */
+.mobile-search {
+  padding: 0.5rem 1rem;
+  background: #A01d46;
+}
+
+.mobile-search .search {
+  width: 100%;
+  position: relative;
+}
+
+.mobile-search .search input {
+  width: 100%;
+  padding: 0.6rem 2.5rem 0.6rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 0.95rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  backdrop-filter: blur(4px);
+  transition: all 0.2s ease;
+}
+
+.mobile-search .search input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.mobile-search .search input:focus {
+  background: #fff;
+  color: #333;
+  border-color: #fff;
+}
+
+.mobile-search .search input:focus::placeholder {
+  color: #999;
+}
+
+.mobile-search .search button {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #fff;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.mobile-search .search input:focus + button {
+  color: #A01d46;
+}
+
+.mobile-search .search-dropdown {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+  margin-top: 0.5rem;
+  max-height: 80vh;
+  overflow-y: auto;
+}

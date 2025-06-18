@@ -143,7 +143,7 @@ const DesktopBottomNav = ({ categories }) => (
 );
 
 // Mobile Navigation
-const MobileNav = ({ mobileMenuOpen, toggleMobileMenu, categories, dropdownOpen, setDropdownOpen, dropdownRef }) => (
+const MobileNav = ({ mobileMenuOpen, toggleMobileMenu, categories, dropdownOpen, setDropdownOpen, dropdownRef, search, setSearch, searchOpen, setSearchOpen, searchResults, searchRef }) => (
   <nav className="navbar-middle navbar-mobile">
     <div className="mobile-top">
       <button
@@ -164,6 +164,16 @@ const MobileNav = ({ mobileMenuOpen, toggleMobileMenu, categories, dropdownOpen,
           priority
         />
       </Link>
+    </div>
+    <div className="mobile-search">
+      <SearchBar
+        search={search}
+        setSearch={setSearch}
+        searchOpen={searchOpen}
+        setSearchOpen={setSearchOpen}
+        searchResults={searchResults}
+        searchRef={searchRef}
+      />
     </div>
     <AnimatePresence>
       {mobileMenuOpen && (
@@ -317,6 +327,12 @@ export default function Navbar() {
         dropdownOpen={dropdownOpen}
         setDropdownOpen={setDropdownOpen}
         dropdownRef={dropdownRef}
+        search={search}
+        setSearch={setSearch}
+        searchOpen={searchOpen}
+        setSearchOpen={setSearchOpen}
+        searchResults={searchResults}
+        searchRef={searchRef}
       />
     </>
   );
