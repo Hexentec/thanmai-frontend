@@ -165,37 +165,49 @@ const MobileNav = ({ mobileMenuOpen, toggleMobileMenu, categories, dropdownOpen,
         />
       </Link>
     </div>
-    <div className={`navbar-bottom ${mobileMenuOpen ? 'mobile-open' : ''}`}> 
-      <button className="mobile-close-button" onClick={toggleMobileMenu} aria-label="Close menu">
-        <FiX size={24} />
-      </button>
-      {/* Main page links */}
-      <div className="mobile-pages">
-        <Link href="/" className="mobile-category-link" onClick={toggleMobileMenu}>Home</Link>
-        <Link href="/about" className="mobile-category-link" onClick={toggleMobileMenu}>About</Link>
-        <Link href="/must-try" className="mobile-category-link" onClick={toggleMobileMenu}>Must Try</Link>
-        <Link href="/bulk-orders" className="mobile-category-link" onClick={toggleMobileMenu}>Bulk Orders</Link>
-        <Link href="/orders" className="mobile-category-link" onClick={toggleMobileMenu}>Orders</Link>
-        <Link href="/contact" className="mobile-category-link" onClick={toggleMobileMenu}>Contact</Link>
-        <Link href="/blog" className="mobile-category-link" onClick={toggleMobileMenu}>Blog</Link>
-      </div>
-      {/* Categories below main links */}
-      <div className="mobile-categories">
-        <span className="mobile-categories-title">Categories</span>
-        <div className="mobile-category-list">
-          {categories.map(category => (
-            <Link
-              key={category._id}
-              href={`/shop?category=${category.slug}`}
-              className="mobile-category-link"
-              onClick={toggleMobileMenu}
-            >
-              {category.name}
-            </Link>
-          ))}
-        </div>
-      </div>
-    </div>
+    <AnimatePresence>
+      {mobileMenuOpen && (
+        <motion.div 
+          className="mobile-menu"
+          initial={{ opacity: 0, x: -300 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -300 }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+        >
+          <div className="mobile-menu-content">
+            <button className="mobile-close-button" onClick={toggleMobileMenu} aria-label="Close menu">
+              <FiX size={24} />
+            </button>
+            {/* Main page links */}
+            <div className="mobile-pages">
+              <Link href="/" className="mobile-category-link" onClick={toggleMobileMenu}>Home</Link>
+              <Link href="/about" className="mobile-category-link" onClick={toggleMobileMenu}>About</Link>
+              <Link href="/must-try" className="mobile-category-link" onClick={toggleMobileMenu}>Must Try</Link>
+              <Link href="/bulk-orders" className="mobile-category-link" onClick={toggleMobileMenu}>Bulk Orders</Link>
+              <Link href="/orders" className="mobile-category-link" onClick={toggleMobileMenu}>Orders</Link>
+              <Link href="/contact" className="mobile-category-link" onClick={toggleMobileMenu}>Contact</Link>
+              <Link href="/blog" className="mobile-category-link" onClick={toggleMobileMenu}>Blog</Link>
+            </div>
+            {/* Categories below main links */}
+            <div className="mobile-categories">
+              <span className="mobile-categories-title">Categories</span>
+              <div className="mobile-category-list">
+                {categories.map(category => (
+                  <Link
+                    key={category._id}
+                    href={`/shop?category=${category.slug}`}
+                    className="mobile-category-link"
+                    onClick={toggleMobileMenu}
+                  >
+                    {category.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   </nav>
 );
 
