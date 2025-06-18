@@ -164,8 +164,14 @@ const MobileNav = ({ mobileMenuOpen, toggleMobileMenu, categories, dropdownOpen,
           priority
         />
       </Link>
+      <button onClick={openCart} className="cart-button">
+        <FiShoppingCart size={20} />
+        {totalQuantity > 0 && (
+          <span className="cart-badge">{totalQuantity}</span>
+        )}
+      </button>
     </div>
-    <div className="mobile-search">
+    <div className="mobile-search-container">
       <SearchBar
         search={search}
         setSearch={setSearch}
